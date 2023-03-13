@@ -9,9 +9,3 @@ variable "key_pair" {
 variable "my_ip" {
   type = string
 }
-
-# instance information
-
-variable "instance_public_ip" {
-  type = string
-}

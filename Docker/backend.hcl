@@ -1,3 +1,3 @@
     region = "ap-southeast-2"
-    bucket = "terraform-backend-maximumpigs"
+    bucket = "DOCKER_DEPLOY"
     key    = "state/terraform.tfstate"
