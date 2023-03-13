@@ -8,7 +8,6 @@ permissions:
 
 jobs:
   terraform_AWS:
-    name: 'Apply_AWS'
     runs-on: ubuntu-latest
     env: 
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
@@ -31,6 +30,8 @@ jobs:
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
+      with:
+        terraform-wrapper: false
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -45,7 +46,15 @@ jobs:
     - name: Terraform Apply AWS
       id: AWS_Apply
       working-directory: ./Infra
-      run: terraform apply -auto-approve
+      run: |
+        terraform apply -auto-approve
+        echo "instance_ip=$(terraform output instance_ip)" >> GITHUB_OUTPUT 
+        echo "secret_key=$(terraform output secret_key)" >> GITHUB_OUTPUT
+
+    - name: Terraform Outputs
+      id: TFOutputs
+      run: 
+      run: 
 
   terraform_Docker:
     name: 'Apply_Docker'
