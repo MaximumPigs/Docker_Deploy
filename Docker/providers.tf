@@ -10,5 +10,5 @@ terraform {
 
 provider "docker" {
   host         = "ssh://ubuntu@${var.instance_ip}:22"
-  key_material = var.secret_key
+  ssh_opts = [ "-i id_rsa" ]
 }

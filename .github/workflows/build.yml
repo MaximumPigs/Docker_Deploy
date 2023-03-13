@@ -48,10 +48,8 @@ jobs:
     - name: Variables
       id: Variables
       run: |
-        TF_VAR_instance_ip="$(terraform output instance_ip)"
-        TF_VAR_secret_key="$(terraform output secret_key)"
-        export TF_VAR_instance_ip
-        export TF_VAR_secret_key
+        echo "$(terraform output instance_ip)" >> id_rsa
+        chmod 0400 id_rsa
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init Docker
@@ -61,4 +59,4 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Apply Docker
       working-directory: ./Docker
-      run: terraform apply -auto-approve -var instance_ip="$(terraform output instance_ip)" -var secret_key="$(terraform output secret_key)"
+      run: terraform apply -auto-approve -var instance_ip="$(terraform output instance_ip)"
