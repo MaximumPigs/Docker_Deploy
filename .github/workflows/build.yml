@@ -16,7 +16,7 @@ jobs:
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
     outputs:
       instance_ip: ${{ steps.AWS_Apply.outputs.instance_ip }}
-      secret_key_id: ${{ steps.AWS_Apply.outputs.secret_key }}  
+      secret_key: ${{ steps.AWS_Apply.outputs.secret_key }}  
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
