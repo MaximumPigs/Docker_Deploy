@@ -60,4 +60,4 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Apply Docker
       working-directory: ./Docker
-      run: terraform apply -auto-approve -var instance_ip=$instance_ip
+      run: terraform apply -auto-approve -var instance_ip="$(instance_ip)
