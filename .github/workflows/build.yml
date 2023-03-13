@@ -51,11 +51,6 @@ jobs:
         echo "instance_ip=$(terraform output instance_ip)" >> GITHUB_OUTPUT 
         echo "secret_key=$(terraform output secret_key)" >> GITHUB_OUTPUT
 
-    - name: Terraform Outputs
-      id: TFOutputs
-      run: 
-      run: 
-
   terraform_Docker:
     name: 'Apply_Docker'
     runs-on: ubuntu-latest
