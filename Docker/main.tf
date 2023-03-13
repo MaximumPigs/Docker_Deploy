@@ -1,8 +1,8 @@
-resource "docker_image" "hello-world" {
-  name = "hello-world:latest"
+resource "docker_image" "nginx" {
+  name = "nginx:latest"
 }
 
-resource "docker_container" "hello-world" {
-  name  = "hello-world"
-  image = docker_image.hello-world.image_id
+resource "docker_container" "nginx" {
+  name  = "nginx"
+  image = docker_image.nginx.image_id
 }

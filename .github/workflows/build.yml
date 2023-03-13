@@ -30,6 +30,12 @@ jobs:
       with:
         terraform_wrapper: false
 
+    # Get the public IP of the github runner to use in TF code
+    - name: Runner IP
+      id: Runner_IP
+      run: |
+        echo "TF_VAR_runner_ip=$(curl ifconfig.me)" >> $GITHUB_ENV
+
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check -recursive
@@ -50,8 +56,8 @@ jobs:
       run: |
         echo "$(terraform output instance_ip)" >> id_rsa
         chmod 0400 id_rsa
-        instance_ip="$(terraform output instance_ip)"
-
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip)" >> $GITHUB_ENV
+        
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init Docker
       working-directory: ./Docker

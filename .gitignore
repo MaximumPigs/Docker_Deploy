@@ -5,6 +5,7 @@
 *.tfstate
 *.tfstate.*
 *.lock.hcl
+id_rsa
 
 # Crash log files
 crash.log
