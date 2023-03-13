@@ -9,5 +9,5 @@ terraform {
 }
 
 provider "docker" {
-  host = "ssh://ubuntu@${module.aws_provision.public_ip}:22"
+  host = "ssh://ubuntu@${var.instance_public_ip}:22"
 }

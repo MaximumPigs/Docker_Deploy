@@ -1,0 +1,21 @@
+name: 'Check'
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: 'Check'
+    id: terraform
+    uses: Maximumpigs/AWS_Docker_Host
+    with: 
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      TF_VAR_my_ip: ${{ secrets.MY_IP }}
+    outputs:
+      TF_VAR_public_ip: ${{ outputs.public_ip }}
+      TF_VAR_secret_key_id: ${{ outputs.secret_key_id }}
