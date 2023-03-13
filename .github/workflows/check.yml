@@ -13,5 +13,5 @@ jobs:
     uses: Maximumpigs/AWS_Docker_Host/.github/workflows/check.yml@main
     secrets: 
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-      AWS_SECRETS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
       MY_IP: ${{ secrets.MY_IP }}
