@@ -14,8 +14,8 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
     outputs:
-      instance_ip: ${{ steps.AWS_Apply.outputs.instance_ip }}
-      secret_key: ${{ steps.AWS_Apply.outputs.secret_key }}  
+      instance_ip: ${{ steps.TFOutputs.outputs.instance_ip }}
+      secret_key: ${{ steps.TFOutputs.outputs.secret_key }}  
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -46,8 +46,11 @@ jobs:
     - name: Terraform Apply AWS
       id: AWS_Apply
       working-directory: ./Infra
+      run: terraform apply -auto-approve
+
+    - name: Outputs
+      id: TFOutputs
       run: |
-        terraform apply -auto-approve
         echo "instance_ip=$(terraform output instance_ip)" >> GITHUB_OUTPUT 
         echo "secret_key=$(terraform output secret_key)" >> GITHUB_OUTPUT
 
