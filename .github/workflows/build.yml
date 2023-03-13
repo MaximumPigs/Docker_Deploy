@@ -31,7 +31,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform-wrapper: false
+        terraform_wrapper: false
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
