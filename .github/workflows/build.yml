@@ -54,6 +54,7 @@ jobs:
     env: 
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      TF_VAR_my_ip: ${{ secrets.MY_IP }}
       TF_VAR_instance_ip: ${{ needs.terraform_AWS.outputs.instance_ip }}
       TF_VAR_secret_key: ${{ needs.terraform_AWS.outputs.secret_key }}
 
