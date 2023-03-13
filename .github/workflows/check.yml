@@ -43,4 +43,4 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       working-directory: ./Infra
-      run: terraform plan
+      run: terraform plan 

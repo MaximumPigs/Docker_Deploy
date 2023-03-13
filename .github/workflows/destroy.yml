@@ -29,14 +29,16 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init -backend-config="backend.hcl"
-
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
-      run: terraform fmt -check
+      run: terraform fmt -check -recursive
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      working-directory: ./Infra
+      run: terraform init -backend-config="backend.hcl"
 
     # Generates an execution plan for Terraform
     - name: Terraform destroy
-      run: terraform destroy -auto-approve -backend-config="backend.hcl"
+      working-directory: ./Infra
+      run: terraform destroy -auto-approve

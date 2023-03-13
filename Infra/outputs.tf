@@ -3,6 +3,6 @@ output "public_ip" {
 }
 
 output "secret_key" {
-  value     = aws_secretsmanager_secret_version.generated_key.secret_string
+  value     = tls_private_key.terraform.private_key_pem
   sensitive = true
 }
