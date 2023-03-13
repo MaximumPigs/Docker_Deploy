@@ -15,8 +15,3 @@ variable "my_ip" {
 variable "instance_ip" {
   type = string
 }
-
-variable "secret_key" {
-  type      = string
-  sensitive = true
-}
