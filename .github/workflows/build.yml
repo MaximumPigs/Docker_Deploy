@@ -45,7 +45,7 @@ jobs:
     - name: Terraform Apply AWS
       id: AWS_Apply
       working-directory: ./Infra
-      run: terraform apply -auto-approve -backend-config="backend.hcl"
+      run: terraform apply -auto-approve
 
   terraform_Docker:
     name: 'Apply_Docker'
@@ -83,5 +83,5 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Apply Docker
       working-directory: ./Docker
-      run: terraform apply -auto-approve -backend-config="backend.hcl"
+      run: terraform apply -auto-approve
 
