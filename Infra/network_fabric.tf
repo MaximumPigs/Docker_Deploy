@@ -32,7 +32,7 @@ resource "aws_default_route_table" "route" {
   }
 
   tags = {
-    name = "Honeypot Route"
+    name = "Route"
   }
 }
 
