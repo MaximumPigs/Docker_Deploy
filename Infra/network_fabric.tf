@@ -52,7 +52,6 @@ resource "aws_security_group" "security_group" {
   ingress {
     description = "SSH from runner IP"
     from_port   = 22
-    cidr_blocks = ["${var.runner_ip}/32"]
     to_port     = 22
     protocol    = "tcp"
   }
