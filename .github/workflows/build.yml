@@ -56,7 +56,7 @@ jobs:
       working-directory: ./Infra
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
-        chmod 0400 id_rsa
+        chmod 0400 ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip)" >> $GITHUB_ENV
         
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
