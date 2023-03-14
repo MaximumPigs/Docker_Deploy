@@ -53,10 +53,11 @@ jobs:
 
     - name: Variables
       id: Variables
+      working-directory: ./Infra
       run: |
-        echo "$(terraform output instance_ip)" >> id_rsa
-        chmod 0400 id_rsa
-        echo "TF_VAR_instance_ip=$(terraform output instance_ip)" >> $GITHUB_ENV
+        echo "$(terraform output secret_key)" >> ../Docker/id_rsa
+        chmod 0400 ../Docker/id_rsa
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
         
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init Docker
@@ -66,4 +67,4 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Apply Docker
       working-directory: ./Docker
-      run: terraform apply -auto-approve -var instance_ip="${instance_ip}"
+      run: terraform apply -auto-approve
