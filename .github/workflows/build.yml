@@ -55,7 +55,7 @@ jobs:
       id: Variables
       working-directory: ./Infra
       run: |
-        echo "$(terraform output secret_key)" >> id_rsa
+        echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip)" >> $GITHUB_ENV
         
