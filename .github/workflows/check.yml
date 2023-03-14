@@ -9,8 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  terraform:
-    name: 'Check'
+  terraform_AWS:
     runs-on: ubuntu-latest
     env: 
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
@@ -30,17 +29,25 @@ jobs:
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_wrapper: false
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      working-directory: ./Infra
-      run: terraform init -backend-config="backend.hcl"
+    # Get the public IP of the github runner to use in TF code
+    - name: Runner IP
+      id: Runner_IP
+      run: |
+        echo "TF_VAR_runner_ip=$(curl ifconfig.me)" >> $GITHUB_ENV
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check -recursive
 
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init AWS
       working-directory: ./Infra
-      run: terraform plan 
+      run: terraform init -backend-config="backend.hcl"
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan AWS
+      working-directory: ./Infra
+      run: terraform plan

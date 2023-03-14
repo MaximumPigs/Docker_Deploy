@@ -2,7 +2,7 @@ resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/24"
 
   tags = {
-    "name" = "honeypot_vpc"
+    "name" = "vpc"
   }
 }
 
@@ -19,7 +19,7 @@ resource "aws_subnet" "subnet" {
   cidr_block = "10.0.0.0/24"
 
   tags = {
-    "name" = "honeypot_subnet"
+    "name" = "subnet"
   }
 }
 
@@ -32,19 +32,27 @@ resource "aws_default_route_table" "route" {
   }
 
   tags = {
-    name = "Honeypot Route"
+    name = "Route"
   }
 }
 
 resource "aws_security_group" "security_group" {
-  name        = "honeypot_security_group"
-  description = "firewall rules for honeypot"
+  name        = "security_group"
+  description = "firewall rules"
   vpc_id      = aws_vpc.vpc.id
 
   ingress {
     description = "SSH from my IP"
     from_port   = 22
     cidr_blocks = ["${var.my_ip}/32"]
+    to_port     = 22
+    protocol    = "tcp"
+  }
+
+  ingress {
+    description = "SSH from runner IP"
+    from_port   = 22
+    cidr_blocks = ["${var.runner_ip}/32"]
     to_port     = 22
     protocol    = "tcp"
   }
