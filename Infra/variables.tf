@@ -9,3 +9,7 @@ variable "key_pair" {
 variable "my_ip" {
   type = string
 }
+
+variable "runner_ip" {
+  type = string
+}
