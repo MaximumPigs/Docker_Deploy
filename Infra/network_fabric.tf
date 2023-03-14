@@ -57,6 +57,14 @@ resource "aws_security_group" "security_group" {
     protocol    = "tcp"
   }
 
+  ingress {
+    description = "SSH from runner IP"
+    from_port   = 80
+    cidr_blocks = ["${var.my_ip}/32"]
+    to_port     = 80
+    protocol    = "tcp"
+  }
+
   egress {
     description = "all outbound"
     from_port   = 0
