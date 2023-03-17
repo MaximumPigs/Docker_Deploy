@@ -5,7 +5,7 @@ resource "docker_image" "image" {
 resource "docker_container" "container" {
   name  = "nginx"
   image = docker_image.image.image_id
-  
+
   ports {
     internal = 19132
     external = 19132
@@ -19,7 +19,7 @@ resource "docker_container" "container" {
   ]
 
   volumes {
-    volume_name = "mc-bedrock-data"
+    volume_name    = "mc-bedrock-data"
     container_path = "/data"
   }
 }
