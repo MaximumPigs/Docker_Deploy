@@ -6,6 +6,7 @@
 *.tfstate.*
 *.lock.hcl
 id_rsa
+creds.ps1
 
 # Crash log files
 crash.log

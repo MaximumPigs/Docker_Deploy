@@ -52,17 +52,17 @@ resource "aws_security_group" "security_group" {
   ingress {
     description = "SSH from runner IP"
     from_port   = 22
-    cidr_blocks = ["${var.runner_ip}/32"]
+    cidr_blocks = ["${var.my_ip == var.runner_ip ? "192.168.0.1" : var.runner_ip}/32"]
     to_port     = 22
     protocol    = "tcp"
   }
 
   ingress {
-    description = "SSH from runner IP"
-    from_port   = 80
+    description = "Minecraft Server"
+    from_port   = 19132
     cidr_blocks = ["${var.my_ip}/32"]
-    to_port     = 80
-    protocol    = "tcp"
+    to_port     = 19132
+    protocol    = "udp"
   }
 
   egress {
