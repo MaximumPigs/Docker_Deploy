@@ -1,6 +1,6 @@
 resource "aws_instance" "my_instance" {
   depends_on = [
-    aws_network_interface.honeypot_nic
+    aws_network_interface.nic
   ]
 
   ami           = "ami-08f0bc76ca5236b20"
@@ -12,14 +12,14 @@ resource "aws_instance" "my_instance" {
   }
 
   network_interface {
-    network_interface_id = aws_network_interface.honeypot_nic.id
+    network_interface_id = aws_network_interface.nic.id
     device_index         = 0
   }
 
   user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh }))
 }
 
-resource "aws_network_interface" "honeypot_nic" {
+resource "aws_network_interface" "nic" {
   subnet_id       = aws_subnet.subnet.id
   security_groups = ["${aws_security_group.security_group.id}"]
 
@@ -34,7 +34,7 @@ resource "aws_eip" "public" {
     aws_instance.my_instance
   ]
 
-  network_interface         = aws_network_interface.honeypot_nic.id
-  associate_with_private_ip = aws_network_interface.honeypot_nic.private_ip
+  network_interface         = aws_network_interface.nic.id
+  associate_with_private_ip = aws_network_interface.nic.private_ip
   vpc                       = true
 }
