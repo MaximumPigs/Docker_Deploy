@@ -45,7 +45,7 @@ jobs:
       working-directory: ./Storage
       run: terraform init -backend-config="backend.hcl"
 
-    # Generates an execution plan for Terraform
+    # Applies Terraform config
     - name: Terraform Apply Storage
       working-directory: ./Storage
       run: terraform apply -auto-approve
@@ -54,14 +54,14 @@ jobs:
       working-directory: ./Storage
       run: |
         echo "TF_VAR_storage_id=$(terraform output storage_id | sed 's/"//g')" >> $GITHUB_ENV
-        sleep 10s
+        sleep 5s
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init AWS
       working-directory: ./Infra
       run: terraform init -backend-config="backend.hcl"
 
-    # Generates an execution plan for Terraform
+    # Applies Terraform config
     - name: Terraform Apply AWS
       working-directory: ./Infra
       run: terraform apply -auto-approve
