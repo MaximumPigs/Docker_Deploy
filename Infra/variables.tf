@@ -13,3 +13,7 @@ variable "my_ip" {
 variable "runner_ip" {
   type = string
 }
+
+variable "storage_id" {
+  type = string
+}
