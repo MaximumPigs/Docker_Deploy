@@ -50,8 +50,7 @@ jobs:
       working-directory: ./Storage
       run: terraform apply -auto-approve
 
-    - name: Variables
-      id: Variables
+    - name: Variables Storage
       working-directory: ./Infra
       run: |
         echo "TF_VAR_storage_id=$(terraform output storage_id)" >> $GITHUB_ENV
@@ -67,8 +66,7 @@ jobs:
       working-directory: ./Infra
       run: terraform apply -auto-approve
 
-    - name: Variables
-      id: Variables
+    - name: Variables AWS
       working-directory: ./Infra
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
