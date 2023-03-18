@@ -6,7 +6,7 @@ resource "aws_instance" "my_instance" {
   ami               = "ami-08f0bc76ca5236b20"
   instance_type     = "t2.micro"
   key_name          = var.key_pair
-  availability_zone = "ap-southeast-2a"
+  availability_zone = var.availability_zone
 
   tags = {
     "name" = "Instance"
@@ -17,18 +17,23 @@ resource "aws_instance" "my_instance" {
     device_index         = 0
   }
 
+  root_block_device {
+    delete_on_termination = false
+  }
+
   user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh }))
 }
 
+/*
 resource "aws_volume_attachment" "ebs_att" {
   device_name = "/dev/sdh"
   volume_id   = var.storage_id
   instance_id = aws_instance.my_instance.id
 }
-
+*/
 resource "aws_network_interface" "nic" {
-  subnet_id       = aws_subnet.subnet.id
-  security_groups = ["${aws_security_group.security_group.id}"]
+  subnet_id         = aws_subnet.subnet.id
+  security_groups   = ["${aws_security_group.security_group.id}"]
 
   tags = {
     "name" = "primary_network_interface"
