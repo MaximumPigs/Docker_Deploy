@@ -21,7 +21,7 @@ resource "aws_instance" "my_instance" {
 
 resource "aws_volume_attachment" "ebs_att" {
   device_name = "/dev/sdh"
-  volume_id = var.storage_id
+  volume_id   = var.storage_id
   instance_id = aws_instance.my_instance.id
 }
 
