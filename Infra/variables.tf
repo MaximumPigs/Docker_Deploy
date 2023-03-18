@@ -22,5 +22,5 @@ variable "storage_id" {
 
 variable "availability_zone" {
   type    = string
-  default = "ap-southeast-2b"
+  default = "ap-southeast-2a"
 }
