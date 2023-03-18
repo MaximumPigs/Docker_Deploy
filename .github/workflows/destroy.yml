@@ -45,8 +45,18 @@ jobs:
       working-directory: ./Infra
       run: terraform init -backend-config="backend.hcl"
 
-    # Generates an execution plan for Terraform
+    # Destroys AWS infra
     - name: Terraform Destroy AWS
       id: AWS_Destroy
       working-directory: ./Infra
+      run: terraform destroy -auto-approve
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init Storage
+      working-directory: ./Storage
+      run: terraform init -backend-config="backend.hcl"
+
+    # Destroys Storage
+    - name: Terraform Destroy Storage
+      working-directory: ./Storage
       run: terraform destroy -auto-approve

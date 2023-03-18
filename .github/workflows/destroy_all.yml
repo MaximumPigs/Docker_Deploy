@@ -1,4 +1,4 @@
-name: 'Apply'
+name: 'Destroy_All'
 
 on:
   workflow_dispatch:
@@ -41,45 +41,12 @@ jobs:
       run: terraform fmt -check -recursive
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init Storage
-      working-directory: ./Storage
-      run: terraform init -backend-config="backend.hcl"
-
-    # Generates an execution plan for Terraform
-    - name: Terraform Apply Storage
-      working-directory: ./Storage
-      run: terraform apply -auto-approve
-
-    - name: Variables Storage
-      working-directory: ./Storage
-      run: |
-        echo "TF_VAR_storage_id=$(terraform output storage_id)" >> $GITHUB_ENV
-        sleep 10s
-
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init AWS
       working-directory: ./Infra
       run: terraform init -backend-config="backend.hcl"
 
     # Generates an execution plan for Terraform
-    - name: Terraform Apply AWS
+    - name: Terraform Destroy AWS
+      id: AWS_Destroy
       working-directory: ./Infra
-      run: terraform apply -auto-approve
-
-    - name: Variables AWS
-      working-directory: ./Infra
-      run: |
-        echo "$(terraform output secret_key)" >> ../Docker/id_rsa
-        chmod 0400 ../Docker/id_rsa
-        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
-        sleep 60s
-        
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init Docker
-      working-directory: ./Docker
-      run: terraform init -backend-config="backend.hcl"
-
-    # Generates an execution plan for Terraform
-    - name: Terraform Apply Docker
-      working-directory: ./Docker
-      run: terraform apply -auto-approve
+      run: terraform destroy -auto-approve
