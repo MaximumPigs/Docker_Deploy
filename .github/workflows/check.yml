@@ -1,8 +1,6 @@
 name: 'Check'
 
 on:
-  pull_request:
-    branch: main
   workflow_dispatch:
 
 permissions:
