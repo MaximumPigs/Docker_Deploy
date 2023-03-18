@@ -16,6 +16,21 @@ packages:
   - docker-ce-cli
   - containerd.io
 
+disk_setup:
+  - data:
+    table_type: 'gpt'
+    layout: True
+    overwrite: False
+
+fs_setup:
+  - label: data
+    filesystem: 'ext4'
+    device: '/dev/sdh1'
+    partition: 'auto'
+
+mounts:
+  - [ data, /data, auto, "defaults" ]
+
 # Enable ipv4 forwarding, required on CIS hardened machines
 write_files:
   - path: /etc/sysctl.d/enabled_ipv4_forwarding.conf

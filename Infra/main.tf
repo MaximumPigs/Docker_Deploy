@@ -8,7 +8,7 @@ resource "aws_instance" "my_instance" {
   key_name      = var.key_pair
 
   tags = {
-    "name" = "Honeypot"
+    "name" = "Instance"
   }
 
   network_interface {
