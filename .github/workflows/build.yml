@@ -53,7 +53,7 @@ jobs:
     - name: Variables Storage
       working-directory: ./Storage
       run: |
-        echo "TF_VAR_storage_id=$(terraform output storage_id)" >> $GITHUB_ENV
+        echo "TF_VAR_storage_id=$(terraform output storage_id | sed 's/"//g')" >> $GITHUB_ENV
         sleep 10s
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
