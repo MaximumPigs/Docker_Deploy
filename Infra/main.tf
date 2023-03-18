@@ -6,6 +6,7 @@ resource "aws_instance" "my_instance" {
   ami           = "ami-08f0bc76ca5236b20"
   instance_type = "t2.micro"
   key_name      = var.key_pair
+  availability_zone = "ap-southeast-2a"
 
   tags = {
     "name" = "Instance"
