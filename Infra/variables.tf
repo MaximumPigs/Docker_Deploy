@@ -16,6 +16,7 @@ variable "runner_ip" {
 
 variable "storage_id" {
   type = string
+  default = "NULL"
 }
 
 # AWS specific information
