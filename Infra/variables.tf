@@ -15,7 +15,7 @@ variable "runner_ip" {
 }
 
 variable "storage_id" {
-  type = string
+  type    = string
   default = "NULL"
 }
 
