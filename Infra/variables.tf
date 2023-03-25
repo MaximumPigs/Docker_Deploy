@@ -15,6 +15,6 @@ variable "runner_ip" {
 }
 
 variable "profile_name" {
-  type = string
+  type    = string
   default = "Null"
 }
