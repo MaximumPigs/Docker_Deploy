@@ -1,3 +1,3 @@
-output "storage_id" {
-  value = aws_ebs_volume.storage.id
+output "profile_name" {
+  value = aws_iam_instance_profile.profile.name
 }

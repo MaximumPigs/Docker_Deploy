@@ -21,5 +21,7 @@ resource "docker_container" "container" {
   volumes {
     volume_name    = "mc-bedrock-data"
     container_path = "/data"
+    host_path      = "/mnt/data"
   }
+
 }

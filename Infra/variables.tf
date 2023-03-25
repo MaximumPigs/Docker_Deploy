@@ -14,14 +14,7 @@ variable "runner_ip" {
   type = string
 }
 
-variable "storage_id" {
-  type    = string
-  default = "NULL"
-}
-
-# AWS specific information
-
-variable "availability_zone" {
-  type    = string
-  default = "ap-southeast-2a"
+variable "profile_name" {
+  type = string
+  default = "Null"
 }

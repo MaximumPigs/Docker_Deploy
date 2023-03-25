@@ -15,21 +15,7 @@ packages:
   - docker-ce
   - docker-ce-cli
   - containerd.io
-
-disk_setup:
-  - data:
-    table_type: 'gpt'
-    layout: True
-    overwrite: False
-
-fs_setup:
-  - label: data
-    filesystem: 'ext4'
-    device: '/dev/sdh1'
-    partition: 'auto'
-
-mounts:
-  - [ data, /data, auto, "defaults" ]
+  - s3fs
 
 # Enable ipv4 forwarding, required on CIS hardened machines
 write_files:
@@ -47,3 +33,7 @@ system_info:
     groups: [docker]
     ssh_authorized_keys:
      - "${gen_key}"
+
+runcmd:
+  - mkdir /mnt/data
+  - s3fs bucket-testmaximumpigs /mnt/data -o iam_role -o rw -ouid=1000,gid=1000,allow_other,mp_umask=002
