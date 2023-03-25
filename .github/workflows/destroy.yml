@@ -50,11 +50,11 @@ jobs:
       working-directory: ./Storage
       run: terraform apply -auto-approve
 
-    # Stores the output storage_id to an environment variable to use in destroy action
+    # Stores the output profile_name to an environment variable to use in destroy action
     - name: Variables Storage
       working-directory: ./Storage
       run: |
-        echo "TF_VAR_storage_id=$(terraform output storage_id | sed 's/"//g')" >> $GITHUB_ENV
+        echo "TF_VAR_profile_name=$(terraform output profile_name | sed 's/"//g')" >> $GITHUB_ENV
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init AWS
