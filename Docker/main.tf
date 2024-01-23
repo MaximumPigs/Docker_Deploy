@@ -5,7 +5,6 @@ resource "docker_image" "image" {
 resource "docker_container" "container" {
   name  = "palworld"
   image = docker_image.image.image_id
-  user  = "root"
 
   ports {
     internal = 8211
@@ -35,7 +34,6 @@ resource "docker_container" "container" {
   ]
 
   volumes {
-    volume_name    = "data"
     container_path = "/palworld"
     host_path      = "/data"
   }
