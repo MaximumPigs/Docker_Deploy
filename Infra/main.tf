@@ -7,8 +7,6 @@ resource "aws_instance" "my_instance" {
   instance_type = "t3.medium"
   key_name      = var.key_pair
 
-  iam_instance_profile = var.profile_name
-
   tags = {
     "name" = "Instance"
   }
