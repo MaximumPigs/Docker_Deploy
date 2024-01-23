@@ -36,6 +36,6 @@ resource "docker_container" "container" {
   mounts {
     type   = "bind"
     target = "/palworld"
-    source = "./game"
+    source = "/data"
   }
 }
