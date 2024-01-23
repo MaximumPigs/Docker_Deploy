@@ -4,7 +4,7 @@ resource "aws_instance" "my_instance" {
   ]
 
   ami           = "ami-08f0bc76ca5236b20"
-  instance_type = "t2.micro"
+  instance_type = "t3.medium"
   key_name      = var.key_pair
 
   iam_instance_profile = var.profile_name
@@ -28,15 +28,4 @@ resource "aws_network_interface" "nic" {
   tags = {
     "name" = "primary_network_interface"
   }
-}
-
-resource "aws_eip" "public" {
-  depends_on = [
-    aws_internet_gateway.gw,
-    aws_instance.my_instance
-  ]
-
-  network_interface         = aws_network_interface.nic.id
-  associate_with_private_ip = aws_network_interface.nic.private_ip
-  vpc                       = true
 }

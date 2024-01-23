@@ -1,27 +1,41 @@
 resource "docker_image" "image" {
-  name = "itzg/minecraft-bedrock-server:latest"
+  name = "jammsen/palworld-dedicated-server:latest"
 }
 
 resource "docker_container" "container" {
-  name  = "nginx"
+  name  = "palworld"
   image = docker_image.image.image_id
 
   ports {
-    internal = 19132
-    external = 19132
+    internal = 8211
+    external = 8211
     protocol = "udp"
   }
 
+  ports {
+    internal = 25575
+    external = 25575
+    protocol = "tcp"
+  }
+
   env = [
-    "EULA=TRUE",
-    "SERVER_NAME=Chicken",
-    "GAMEMODE=creative"
+    "ALWAYS_UPDATE_ON_START=true",
+    "MAX_PLAYERS=32",
+    "MULTITHREAD_ENABLED=true",
+    "COMMUNITY_SERVER=true",
+    "RCON_ENABLED=true",
+    "RCON_PORT=25575",
+    "PUBLIC_IP=${var.instance_ip}",
+    "PUBLIC_PORT=8211",
+    "SERVER_NAME=[AU]BroWorld",
+    "SERVER_DESCRIPTION=BroWorld, Bro",
+    "SERVER_PASSWORD=Icecream420Sandwich69Nice",
+    "ADMIN_PASSWORD=Icecream420Sandwich69Nice!"
   ]
 
   volumes {
     volume_name    = "mc-bedrock-data"
-    container_path = "/data"
-    host_path      = "/mnt/data"
+    container_path = "./game"
+    host_path      = "/data"
   }
-
 }

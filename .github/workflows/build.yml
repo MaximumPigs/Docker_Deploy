@@ -41,22 +41,6 @@ jobs:
       run: terraform fmt -check -recursive
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init Storage
-      working-directory: ./Storage
-      run: terraform init -backend-config="backend.hcl"
-
-    # Applies Terraform config
-    - name: Terraform Apply Storage
-      working-directory: ./Storage
-      run: terraform apply -auto-approve
-
-    - name: Variables Storage
-      working-directory: ./Storage
-      run: |
-        echo "TF_VAR_profile_name=$(terraform output profile_name | sed 's/"//g')" >> $GITHUB_ENV
-        sleep 5s
-
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init AWS
       working-directory: ./Infra
       run: terraform init -backend-config="backend.hcl"

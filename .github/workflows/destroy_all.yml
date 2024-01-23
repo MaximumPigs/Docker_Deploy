@@ -66,8 +66,3 @@ jobs:
       id: AWS_Destroy
       working-directory: ./Infra
       run: terraform destroy -auto-approve
-
-    # Destroys Storage
-    - name: Terraform Destroy Storage
-      working-directory: ./Storage
-      run: terraform destroy -auto-approve
