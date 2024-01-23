@@ -33,8 +33,9 @@ resource "docker_container" "container" {
     "ADMIN_PASSWORD=Icecream420Sandwich69Nice!"
   ]
 
-  volumes {
-    container_path = "/palworld"
-    host_path      = "/data"
+  mounts {
+    type   = "bind"
+    target = "/palworld"
+    source = "./game"
   }
 }
