@@ -58,12 +58,20 @@ resource "aws_security_group" "security_group" {
   }
 
   ingress {
-    description = "Minecraft Server"
-    from_port   = 19132
-    cidr_blocks = ["${var.my_ip}/32"]
-    to_port     = 19132
+    description = "Server"
+    from_port   = 8211
+    cidr_blocks = ["0.0.0.0/0"]
+    to_port     = 8211
     protocol    = "udp"
   }
+
+  ingress {
+    description = "RCON"
+    from_port   = 25575
+    cidr_blocks = ["${var.my_ip}/32"]
+    to_port     = 25575
+    protocol    = "tcp"
+  }  
 
   egress {
     description = "all outbound"
