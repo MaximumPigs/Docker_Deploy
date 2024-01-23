@@ -3,9 +3,10 @@ resource "aws_instance" "my_instance" {
     aws_network_interface.nic
   ]
 
-  ami           = "ami-08f0bc76ca5236b20"
-  instance_type = "t3.medium"
-  key_name      = var.key_pair
+  ami                         = "ami-08f0bc76ca5236b20"
+  instance_type               = "t3.medium"
+  key_name                    = var.key_pair
+  associate_public_ip_address = true
 
   tags = {
     "name" = "Instance"
