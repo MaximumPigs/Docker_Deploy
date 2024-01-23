@@ -1,7 +1,4 @@
 resource "aws_instance" "my_instance" {
-  depends_on = [
-    aws_network_interface.nic
-  ]
 
   ami                         = "ami-08f0bc76ca5236b20"
   instance_type               = "t3.medium"
