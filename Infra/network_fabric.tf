@@ -71,7 +71,7 @@ resource "aws_security_group" "security_group" {
     cidr_blocks = ["${var.my_ip}/32"]
     to_port     = 25575
     protocol    = "tcp"
-  }  
+  }
 
   egress {
     description = "all outbound"
