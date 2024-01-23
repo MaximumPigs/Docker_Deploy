@@ -35,7 +35,7 @@ resource "docker_container" "container" {
 
   volumes {
     volume_name    = "mc-bedrock-data"
-    container_path = "./game"
+    container_path = "/game"
     host_path      = "/data"
   }
 }
