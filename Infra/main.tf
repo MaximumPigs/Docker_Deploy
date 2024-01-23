@@ -7,8 +7,8 @@ resource "aws_instance" "my_instance" {
   instance_type               = "t3.medium"
   key_name                    = var.key_pair
   associate_public_ip_address = true
-  subnet_id       = aws_subnet.subnet.id
-  security_groups = ["${aws_security_group.security_group.id}"]
+  subnet_id                   = aws_subnet.subnet.id
+  security_groups             = ["${aws_security_group.security_group.id}"]
 
   tags = {
     "name" = "Instance"
