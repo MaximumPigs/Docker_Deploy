@@ -10,11 +10,6 @@ resource "aws_instance" "my_instance" {
   tags = {
     "name" = "Instance"
   }
-
-  network_interface {
-    network_interface_id = aws_network_interface.nic.id
-    device_index         = 0
-  }
-
+  
   user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh }))
 }
