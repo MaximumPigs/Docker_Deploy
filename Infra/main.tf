@@ -5,7 +5,7 @@ resource "aws_instance" "my_instance" {
   key_name                    = var.key_pair
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.subnet.id
-  security_groups             = ["${aws_security_group.security_group.id}"]
+  vpc_security_group_ids      = ["${aws_security_group.security_group.id}"]
 
   root_block_device {
     delete_on_termination = true
