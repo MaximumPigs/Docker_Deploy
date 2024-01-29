@@ -2,6 +2,7 @@
 
 variable "key_pair" {
   type = string
+  default = "MaximumPigs_Key_Pair"
 }
 
 # network information
