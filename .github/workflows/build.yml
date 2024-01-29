@@ -61,3 +61,8 @@ jobs:
     - name: Terraform Apply Docker
       working-directory: ./Docker
       run: terraform apply -auto-approve
+
+    # Gets Terraform state and generates cost using cost.modules.tf
+    - name: Terraform Get Cost AWS
+      working-directory: ./Infra
+      run: 'terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY'      
