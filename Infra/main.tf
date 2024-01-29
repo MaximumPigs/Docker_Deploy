@@ -1,7 +1,7 @@
 resource "aws_instance" "my_instance" {
 
   ami                         = "ami-08f0bc76ca5236b20"
-  instance_type               = "t2.medium"
+  instance_type               = "t2.large"
   key_name                    = var.key_pair
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.subnet.id
