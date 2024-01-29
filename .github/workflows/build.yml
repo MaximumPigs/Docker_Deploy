@@ -30,12 +30,6 @@ jobs:
       with:
         terraform_wrapper: false
 
-    # Get the public IP of the github runner to use in TF code
-    - name: Runner IP
-      id: Runner_IP
-      run: |
-        echo "TF_VAR_runner_ip=$(curl ifconfig.me)" >> $GITHUB_ENV
-
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check -recursive
@@ -45,14 +39,12 @@ jobs:
       working-directory: ./Infra
       run: terraform init -backend-config="backend.hcl"
 
-    # Generates an execution plan for Terraform
+    # Applies Terraform config
     - name: Terraform Apply AWS
-      id: AWS_Apply
       working-directory: ./Infra
       run: terraform apply -auto-approve
 
-    - name: Variables
-      id: Variables
+    - name: Variables AWS
       working-directory: ./Infra
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa

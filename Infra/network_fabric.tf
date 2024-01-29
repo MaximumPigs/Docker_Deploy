@@ -40,36 +40,34 @@ resource "aws_security_group" "security_group" {
   name        = "security_group"
   description = "firewall rules"
   vpc_id      = aws_vpc.vpc.id
+}
 
-  ingress {
-    description = "SSH from my IP"
-    from_port   = 22
-    cidr_blocks = ["${var.my_ip}/32"]
-    to_port     = 22
-    protocol    = "tcp"
-  }
+resource "aws_security_group_rule" "ssh_inbound" {
+  type              = "ingress"
+  security_group_id = aws_security_group.security_group.id
+  description       = "SSH Inbound from runner and my OP"
+  from_port         = 22
+  cidr_blocks       = ["${coalesce(var.my_ip, "192.168.0.1")}/32", "${chomp(data.http.myip.response_body)}/32"]
+  to_port           = 22
+  protocol          = "tcp"
+}
 
-  ingress {
-    description = "SSH from runner IP"
-    from_port   = 22
-    cidr_blocks = ["${var.my_ip == var.runner_ip ? "192.168.0.1" : var.runner_ip}/32"]
-    to_port     = 22
-    protocol    = "tcp"
-  }
+resource "aws_security_group_rule" "game_server" {
+  type              = "ingress"
+  security_group_id = aws_security_group.security_group.id
+  description       = "Game Server Inbound"
+  from_port         = 8211
+  cidr_blocks       = ["0.0.0.0/0"]
+  to_port           = 8211
+  protocol          = "udp"
+}
 
-  ingress {
-    description = "Minecraft Server"
-    from_port   = 19132
-    cidr_blocks = ["${var.my_ip}/32"]
-    to_port     = 19132
-    protocol    = "udp"
-  }
-
-  egress {
-    description = "all outbound"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-    protocol    = -1
-  }
+resource "aws_security_group_rule" "all" {
+  type              = "egress"
+  security_group_id = aws_security_group.security_group.id
+  description       = "all outbound"
+  from_port         = 0
+  to_port           = 0
+  cidr_blocks       = ["0.0.0.0/0"]
+  protocol          = -1
 }

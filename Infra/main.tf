@@ -1,40 +1,26 @@
 resource "aws_instance" "my_instance" {
-  depends_on = [
-    aws_network_interface.nic
-  ]
 
-  ami           = "ami-08f0bc76ca5236b20"
-  instance_type = "t2.micro"
-  key_name      = var.key_pair
+  ami                         = "ami-08f0bc76ca5236b20"
+  instance_type               = "t3.medium"
+  key_name                    = var.key_pair
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.subnet.id
+  vpc_security_group_ids      = ["${aws_security_group.security_group.id}"]
 
-  tags = {
-    "name" = "Honeypot"
+  root_block_device {
+    delete_on_termination = true
+    volume_size           = "30"
   }
 
-  network_interface {
-    network_interface_id = aws_network_interface.nic.id
-    device_index         = 0
+  tags = {
+    "name" = "Instance"
   }
 
   user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh }))
 }
 
-resource "aws_network_interface" "nic" {
-  subnet_id       = aws_subnet.subnet.id
-  security_groups = ["${aws_security_group.security_group.id}"]
 
-  tags = {
-    "name" = "primary_network_interface"
-  }
-}
-
-resource "aws_eip" "public" {
-  depends_on = [
-    aws_internet_gateway.gw,
-    aws_instance.my_instance
-  ]
-
-  network_interface         = aws_network_interface.nic.id
-  associate_with_private_ip = aws_network_interface.nic.private_ip
-  vpc                       = true
+resource "aws_ec2_instance_state" "power" {
+  instance_id = aws_instance.my_instance.id
+  state       = var.instance_state
 }

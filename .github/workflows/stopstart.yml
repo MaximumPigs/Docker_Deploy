@@ -1,7 +1,16 @@
-name: 'Destroy_All'
+name: 'Stop/Start'
 
 on:
   workflow_dispatch:
+    inputs:
+      power:
+        type: "choice"
+        description: "Start or Stop the PalWorld server"
+        options:
+          - Start
+          - Stop
+        
+
 
 permissions:
   contents: read
@@ -39,8 +48,25 @@ jobs:
       working-directory: ./Infra
       run: terraform init -backend-config="backend.hcl"
 
-    # Destroys AWS infra
-    - name: Terraform Destroy AWS
-      id: AWS_Destroy
+    # Applies Terraform config
+    - name: Terraform Apply AWS
       working-directory: ./Infra
-      run: terraform destroy -auto-approve
+      run: terraform apply -auto-approve -var "instance_state=${{ github.event.inputs.power == 'Stop' && 'stopped' || 'running' }}"
+
+    - name: Variables AWS
+      working-directory: ./Infra
+      run: |
+        echo "$(terraform output secret_key)" >> ../Docker/id_rsa
+        chmod 0400 ../Docker/id_rsa
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
+        sleep 60s
+        
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init Docker
+      working-directory: ./Docker
+      run: terraform init -backend-config="backend.hcl"
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Apply Docker
+      working-directory: ./Docker
+      run: terraform apply -auto-approve

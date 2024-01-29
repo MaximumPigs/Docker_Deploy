@@ -16,6 +16,7 @@ packages:
   - docker-ce-cli
   - containerd.io
 
+
 # Enable ipv4 forwarding, required on CIS hardened machines
 write_files:
   - path: /etc/sysctl.d/enabled_ipv4_forwarding.conf
@@ -32,3 +33,7 @@ system_info:
     groups: [docker]
     ssh_authorized_keys:
      - "${gen_key}"
+
+runcmd:
+  - mkdir /data
+  - chmod 777 /data

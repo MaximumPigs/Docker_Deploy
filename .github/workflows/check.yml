@@ -1,8 +1,6 @@
 name: 'Check'
 
 on:
-  pull_request:
-    branch: main
   workflow_dispatch:
 
 permissions:
@@ -32,12 +30,6 @@ jobs:
       with:
         terraform_wrapper: false
 
-    # Get the public IP of the github runner to use in TF code
-    - name: Runner IP
-      id: Runner_IP
-      run: |
-        echo "TF_VAR_runner_ip=$(curl ifconfig.me)" >> $GITHUB_ENV
-
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check -recursive
@@ -51,3 +43,9 @@ jobs:
     - name: Terraform Plan AWS
       working-directory: ./Infra
       run: terraform plan
+
+    - name: Checkov
+      uses: bridgecrewio/checkov-action@v12
+      with:
+        output_format: cli
+        framework: terraform

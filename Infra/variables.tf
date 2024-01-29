@@ -7,9 +7,13 @@ variable "key_pair" {
 # network information
 
 variable "my_ip" {
-  type = string
+  type    = string
+  default = ""
 }
 
-variable "runner_ip" {
-  type = string
+# infra
+
+variable "instance_state" {
+  type    = string
+  default = "running"
 }
