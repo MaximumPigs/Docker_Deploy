@@ -1,7 +1,7 @@
 # provider information
 
 variable "key_pair" {
-  type = string
+  type    = string
   default = "MaximumPigs_Key_Pair"
 }
 
