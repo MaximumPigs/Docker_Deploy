@@ -10,3 +10,10 @@ variable "my_ip" {
   type    = string
   default = ""
 }
+
+# infra
+
+variable "instance_state" {
+  type    = string
+  default = "running"
+}

@@ -1,0 +1,72 @@
+name: 'Stop/Start'
+
+on:
+  workflow_dispatch:
+    inputs:
+      power:
+        type: "choice"
+        description: "Start or Stop the PalWorld server"
+        options:
+          - Start
+          - Stop
+        
+
+
+permissions:
+  contents: read
+
+jobs:
+  terraform_AWS:
+    runs-on: ubuntu-latest
+    env: 
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      TF_VAR_my_ip: ${{ secrets.MY_IP }}
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_wrapper: false
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: terraform fmt -check -recursive
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init AWS
+      working-directory: ./Infra
+      run: terraform init -backend-config="backend.hcl"
+
+    # Applies Terraform config
+    - name: Terraform Apply AWS
+      working-directory: ./Infra
+      run: terraform apply -auto-approve -var "instance_state=${{ github.event.inputs.power == 'Stop' && 'stopped' || 'running' }}"
+
+    - name: Variables AWS
+      working-directory: ./Infra
+      run: |
+        echo "$(terraform output secret_key)" >> ../Docker/id_rsa
+        chmod 0400 ../Docker/id_rsa
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
+        sleep 60s
+        
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init Docker
+      working-directory: ./Docker
+      run: terraform init -backend-config="backend.hcl"
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Apply Docker
+      working-directory: ./Docker
+      run: terraform apply -auto-approve

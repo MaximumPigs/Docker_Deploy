@@ -18,3 +18,9 @@ resource "aws_instance" "my_instance" {
 
   user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh }))
 }
+
+
+resource "aws_ec2_instance_state" "power" {
+  instance_id = aws_instance.my_instance.id
+  state       = var.instance_state
+}

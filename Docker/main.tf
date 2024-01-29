@@ -30,7 +30,8 @@ resource "docker_container" "container" {
     "SERVER_NAME=[AU]BroWorld",
     "SERVER_DESCRIPTION=BroWorld, Bro",
     "SERVER_PASSWORD=",
-    "ADMIN_PASSWORD=Icecream420Sandwich69Nice!"
+    "ADMIN_PASSWORD=Icecream420Sandwich69Nice!",
+    "SERVER_PASSWORD=Icecream420Sandwich69Nice"
   ]
 
   mounts {
