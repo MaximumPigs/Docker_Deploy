@@ -39,7 +39,6 @@ jobs:
       working-directory: ./Infra
       run: |
         terraform init -backend-config="backend.hcl"
-        terraform refresh
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan AWS

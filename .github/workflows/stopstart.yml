@@ -48,8 +48,7 @@ jobs:
       working-directory: ./Infra
       run: |
         terraform init -backend-config="backend.hcl"
-        terraform refresh
-
+ 
     # Applies Terraform config
     - name: Terraform Apply AWS
       working-directory: ./Infra
