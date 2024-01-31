@@ -42,7 +42,11 @@ jobs:
       working-directory: ./Infra
       run: |
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
-        echo "SSH_KEY=$(terraform output secret_key)"
+        {
+          echo 'SSH_KEY<<EOF'
+          terraform output secret_key
+          echo EOF
+        } >> "$GITHUB_ENV"
         echo "SSH_KEY=$(terraform output secret_key)" >> $GITHUB_ENV
 #        echo "::add-mask::$SSH_KEY"
 
