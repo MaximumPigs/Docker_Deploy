@@ -49,7 +49,7 @@ jobs:
 
     - name: Fetch game files
       run: |
-        scp -i ./Docker/id_rsa ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames
+        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames/
 
     - name: Copy game files to S3
       run: |
