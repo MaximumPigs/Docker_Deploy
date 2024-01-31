@@ -35,9 +35,11 @@ jobs:
       run: terraform fmt -check -recursive
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init AWS
+    - name: Terraform Init
       working-directory: ./Infra
-      run: terraform init -backend-config="backend.hcl"
+      run: |
+        terraform init -backend-config="backend.hcl"
+        terraform refresh
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan AWS
