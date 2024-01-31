@@ -60,7 +60,7 @@ jobs:
 
     - name: Copy game files to S3
       uses: jakejarvis/s3-sync-action@master
-      with:
+      env:
         AWS_S3_Bucket: game-files-maximumpigs
         AWS_REGION: ap-southeast-2
         SOURCE_DIR: /tmp/SaveGames
