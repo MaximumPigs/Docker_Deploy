@@ -12,6 +12,8 @@ jobs:
     env: 
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_BUCKET_KEY_ID: ${{ secrets.AWS_BUCKET_KEY }}
+      AWS_SECRET_BUCKET_KEY: ${{ secrets.AWS_SECRET_BUCKET_KEY }}
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -61,3 +63,8 @@ jobs:
     - name: Terraform Apply Docker
       working-directory: ./Docker
       run: terraform apply -auto-approve
+
+    # Gets Terraform state and generates cost using cost.modules.tf
+    - name: Terraform Get Cost AWS
+      working-directory: ./Infra
+      run: 'terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY'      
