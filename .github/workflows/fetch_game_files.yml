@@ -42,21 +42,10 @@ jobs:
       working-directory: ./Infra
       run: |
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
-        {
-          echo 'SSH_KEY<<EOF'
-          terraform output secret_key
-          echo EOF
-        } >> "$GITHUB_ENV"
-        echo "::add-mask::$SSH_KEY"
-
-    - name: Inject SSH key
-      uses: webfactory/ssh-agent@v0.8.0
-      with:
-          ssh-private-key: ${{ env.SSH_KEY }}
 
     - name: Fetch game files
       run: |
-        scp ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames
+        scp -i ./Docker/id_rsa ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames
 
     - name: Copy game files to S3
       run: |
