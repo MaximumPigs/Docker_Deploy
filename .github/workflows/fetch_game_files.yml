@@ -38,15 +38,16 @@ jobs:
       working-directory: ./Infra
       run: terraform init -backend-config="backend.hcl"
 
+    - name: Set some environment variables
+      run: |
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
+        echo "SSH_KEY=$(terraform output secret_key)" >> $GITHUB_ENV
+        echo "::add-mask::$SSH_KEY"
+
     - name: Inject SSH key
       uses: webfactory/ssh-agent@v0.8.0
       with:
-          ssh-private-key: "$(terraform output secret_key)"
-
-    - name: Get Instance IP
-      working-directory: ./Infra
-      run: |
-        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
+          ssh-private-key: ${{ github.env.SSH_KEY }}
 
     - name: Fetch game files
       run: |
