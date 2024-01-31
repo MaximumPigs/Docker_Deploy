@@ -2,5 +2,5 @@
 
 variable "instance_ip" {
   type    = string
-  default = "54.206.14.206"
+  default = "13.211.237.248"
 }

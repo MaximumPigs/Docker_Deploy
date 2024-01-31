@@ -1,4 +1,4 @@
-name: 'Destroy_All'
+name: 'Fetch Game Files'
 
 on:
   workflow_dispatch:
@@ -12,7 +12,6 @@ jobs:
     env: 
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}   
-      TF_VAR_my_ip: ${{ secrets.MY_IP }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -23,20 +22,6 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: Inject SSH key
-      uses: webfactory/ssh-agent@v0.8.0
-      with:
-          ssh-private-key: "$(terraform output secret_key)"
-
-    - name: Get Instance IP
-      working-directory: ./Infra
-      run: |
-        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
-
-    - name: Fetch game files
-      run: |
-        scp ubuntu@${{ github.env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
@@ -53,8 +38,20 @@ jobs:
       working-directory: ./Infra
       run: terraform init -backend-config="backend.hcl"
 
-    # Destroys AWS infra
-    - name: Terraform Destroy AWS
-      id: AWS_Destroy
+    - name: Inject SSH key
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+          ssh-private-key: "$(terraform output secret_key)"
+
+    - name: Get Instance IP
       working-directory: ./Infra
-      run: terraform destroy -auto-approve
+      run: |
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
+
+    - name: Fetch game files
+      run: |
+        scp ubuntu@${{ github.env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames
+
+    - name: Copy game files to S3
+      run: |
+        aws s3 cp /tmp/SaveGames s3://game-files-maximumpigs/palworld/SaveGames --recursive      

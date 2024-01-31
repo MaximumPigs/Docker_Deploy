@@ -1,0 +1,11 @@
+- name: Destroy
+  hosts: all
+  tasks:
+    - name: Backup Game Files
+      amazon.aws.s3_object:
+        mode: put
+        overwrite: always
+        region: ap-southeast-2
+        bucket: game-files-maximumpigs
+        src: /data/Pal/Saved/SaveGames
+        object: /palworld/SaveGames
