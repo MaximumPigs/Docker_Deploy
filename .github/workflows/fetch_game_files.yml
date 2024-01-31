@@ -41,13 +41,22 @@ jobs:
     - name: Set some environment variables
       working-directory: ./Infra
       run: |
-        echo "$(terraform output secret_key)" >> ../Docker/id_rsa
-        chmod 0400 ../Docker/id_rsa      
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
+        {
+          echo 'SSH_KEY<<EOF'
+          terraform output secret_key
+          echo EOF
+        } >> "$GITHUB_ENV"
+        echo "::add-mask::$SSH_KEY"
+
+    - name: Inject SSH key
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+          ssh-private-key: ${{ env.SSH_KEY }}
 
     - name: Fetch game files
       run: |
-        scp -i ./Docker/id_rsa ubuntu@${{ github.env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames
+        scp ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames
 
     - name: Copy game files to S3
       run: |
