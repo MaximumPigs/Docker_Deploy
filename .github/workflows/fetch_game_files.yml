@@ -59,5 +59,9 @@ jobs:
         scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames/
 
     - name: Copy game files to S3
-      run: |
-        aws s3 cp /tmp/SaveGames s3://game-files-maximumpigs/palworld/SaveGames --recursive      
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        AWS_S3_Bucket: game-files-maximumpigs
+        AWS_REGION: ap-southeast-2
+        SOURCE_DIR: /tmp/SaveGames
+        DEST_DIR: /palworld/SaveGames
