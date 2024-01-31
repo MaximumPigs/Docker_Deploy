@@ -47,8 +47,7 @@ jobs:
           terraform output secret_key
           echo EOF
         } >> "$GITHUB_ENV"
-        echo "SSH_KEY=$(terraform output secret_key)" >> $GITHUB_ENV
-#        echo "::add-mask::$SSH_KEY"
+        echo "::add-mask::$SSH_KEY"
 
     - name: Inject SSH key
       uses: webfactory/ssh-agent@v0.8.0
