@@ -50,7 +50,9 @@ jobs:
     # Applies Terraform config - Required here to update runner_ip firewall rule
     - name: Terraform Apply
       working-directory: ./Infra
-      run: terraform apply -auto-approve
+      run: | 
+        terraform apply -auto-approve
+        terraform refresh
 
     - name: Fetch game files
       run: |
