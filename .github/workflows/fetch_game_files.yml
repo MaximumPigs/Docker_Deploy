@@ -47,7 +47,7 @@ jobs:
 
     - name: Fetch game files
       run: |
-        scp ubuntu@${{ github.env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames -i Docker/id_rsa
+        scp -i ./Docker/id_rsa ubuntu@${{ github.env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames /tmp/SaveGames
 
     - name: Copy game files to S3
       run: |
