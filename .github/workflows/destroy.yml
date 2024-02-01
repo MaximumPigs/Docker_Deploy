@@ -57,7 +57,7 @@ jobs:
 
     - name: Fetch game files
       run: |
-        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames ./SaveGames/
+        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames/* ./SaveGames/
     
     - name: Copy game files to S3
       uses: jakejarvis/s3-sync-action@master
@@ -65,7 +65,7 @@ jobs:
         AWS_S3_BUCKET: game-files-maximumpigs
         AWS_REGION: ap-southeast-2
         SOURCE_DIR: ./SaveGames
-        DEST_DIR: /palworld/SaveGames
+        DEST_DIR: palworld/SaveGames
 
     # Destroys AWS infra
     - name: Terraform Destroy AWS

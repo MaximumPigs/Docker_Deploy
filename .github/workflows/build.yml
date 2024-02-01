@@ -68,6 +68,7 @@ jobs:
     - name: Place game files
       run: |
         scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ./SaveGames/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames
+        rm -r ./SaveGames/*
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init Docker
