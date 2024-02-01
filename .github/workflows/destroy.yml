@@ -39,6 +39,7 @@ jobs:
       working-directory: ./Infra
       run: |
         terraform init -backend-config="backend.hcl"
+        terraform refresh
 
     - name: Set some environment variables
       working-directory: ./Infra
