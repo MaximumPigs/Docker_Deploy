@@ -24,25 +24,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Set some environment variables
-      working-directory: ./Infra
-      run: |
-        echo "$(terraform output secret_key)" >> ../Docker/id_rsa
-        chmod 0400 ../Docker/id_rsa
-        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
-
-    - name: Fetch game files
-      run: |
-        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames ./SaveGames/
-  
-    - name: Copy game files to S3
-      uses: jakejarvis/s3-sync-action@master
-      env:
-        AWS_S3_BUCKET: game-files-maximumpigs
-        AWS_REGION: ap-southeast-2
-        SOURCE_DIR: ./SaveGames
-        DEST_DIR: /palworld/SaveGames
-
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -58,6 +39,25 @@ jobs:
       working-directory: ./Infra
       run: |
         terraform init -backend-config="backend.hcl"
+
+        - name: Set some environment variables
+        working-directory: ./Infra
+        run: |
+          echo "$(terraform output secret_key)" >> ../Docker/id_rsa
+          chmod 0400 ../Docker/id_rsa
+          echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
+  
+    - name: Fetch game files
+      run: |
+        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames ./SaveGames/
+    
+    - name: Copy game files to S3
+      uses: jakejarvis/s3-sync-action@master
+      env:
+        AWS_S3_BUCKET: game-files-maximumpigs
+        AWS_REGION: ap-southeast-2
+        SOURCE_DIR: ./SaveGames
+        DEST_DIR: /palworld/SaveGames
 
     # Destroys AWS infra
     - name: Terraform Destroy AWS
