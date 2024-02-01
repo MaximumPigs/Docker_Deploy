@@ -63,7 +63,7 @@ jobs:
 
     - name: Copy game files from S3
       run: |
-        aws s3 cp s3://game-files-maximumpigs/SaveGames ./SaveGames --recursive
+        aws s3 cp s3://game-files-maximumpigs/palworld/SaveGames ./SaveGames --recursive
 
     - name: Place game files
       run: |
