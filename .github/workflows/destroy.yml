@@ -1,4 +1,4 @@
-name: 'Destroy_All'
+name: 'Destroy'
 
 on:
   workflow_dispatch:
@@ -24,14 +24,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Inject SSH key
-      uses: webfactory/ssh-agent@v0.8.0
-      with:
-          ssh-private-key: "$(terraform output secret_key)"
-
-    - name: Get Instance IP
+    - name: Set some environment variables
       working-directory: ./Infra
       run: |
+        echo "$(terraform output secret_key)" >> ../Docker/id_rsa
+        chmod 0400 ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
 
     - name: Fetch game files
