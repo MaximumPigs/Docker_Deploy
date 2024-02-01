@@ -40,12 +40,12 @@ jobs:
       run: |
         terraform init -backend-config="backend.hcl"
 
-        - name: Set some environment variables
-        working-directory: ./Infra
-        run: |
-          echo "$(terraform output secret_key)" >> ../Docker/id_rsa
-          chmod 0400 ../Docker/id_rsa
-          echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
+    - name: Set some environment variables
+      working-directory: ./Infra
+      run: |
+        echo "$(terraform output secret_key)" >> ../Docker/id_rsa
+        chmod 0400 ../Docker/id_rsa
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
   
     - name: Fetch game files
       run: |
