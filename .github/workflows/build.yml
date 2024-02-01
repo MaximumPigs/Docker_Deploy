@@ -59,7 +59,7 @@ jobs:
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
-        sleep 30s
+        sleep 60s
 
     - name: Copy game files from S3
       run: |
