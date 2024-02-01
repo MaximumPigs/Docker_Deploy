@@ -32,6 +32,9 @@ jobs:
       with:
         terraform_wrapper: false
 
+    # Install AWS CLI
+    - uses: aws-actions/setup-sam@v2    
+
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check -recursive
@@ -41,12 +44,13 @@ jobs:
       working-directory: ./Infra
       run: |
         terraform init -backend-config="backend.hcl"
-        terraform refresh
 
     # Applies Terraform config
     - name: Terraform Apply AWS
       working-directory: ./Infra
-      run: terraform apply -auto-approve
+      run: |
+        terraform apply -auto-approve
+        terraform refresh
 
     - name: Variables AWS
       working-directory: ./Infra
@@ -54,8 +58,16 @@ jobs:
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
-        sleep 60s
-        
+        sleep 30s
+
+    - name: Copy game files from S3
+      run: |
+        aws s3 cp s3://game-files-maximumpigs/SaveGames ./SaveGames --recursive
+
+    - name: Place game files
+      run: |
+        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ./SaveGames/ ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init Docker
       working-directory: ./Docker
