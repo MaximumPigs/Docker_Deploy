@@ -22,9 +22,6 @@ jobs:
 
     steps:
 
-    # Clean the runner
-    - uses: AutoModality/action-clean@v1      
-
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
@@ -60,7 +57,7 @@ jobs:
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
-        ssh-add ../Docker/id_rsa
+        ssh-add && ssh-add ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
         sleep 60s
 
@@ -98,4 +95,7 @@ jobs:
     # Gets Terraform state and generates cost using cost.modules.tf
     - name: Terraform Get Cost AWS
       working-directory: Infra
-      run: 'terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY'      
+      run: 'terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY'
+
+    # Clean the runner
+    - uses: AutoModality/action-clean@v1  
