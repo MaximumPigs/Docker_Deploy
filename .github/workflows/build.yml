@@ -62,7 +62,7 @@ jobs:
 
     - name: Create folders on remote host
       run: |
-        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa 'mkdir -p /data/Pal/Saved/SaveGames'
+        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'mkdir -p /data/Pal/Saved/SaveGames'
         && chmod -R 777 /data
         aws s3 cp s3://game-files-maximumpigs/palworld/SaveGames /data/Pal/Saved/SaveGames --recursive
 
@@ -74,7 +74,7 @@ jobs:
     - name: Place game files
       run: |
         scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ./SaveGames/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames
-        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa 'chmod -R 777 /data && ls -laR /data/Pal/Saved/SaveGames'
+        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'chmod -R 777 /data && ls -laR /data/Pal/Saved/SaveGames'
         rm -r SaveGames/*
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
