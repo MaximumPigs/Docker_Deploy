@@ -63,7 +63,7 @@ jobs:
 
     - name: Place game files
       run: |
-        rsync -ur -i ./Docker/id_rsa -e "ssh -o StrictHostKeyChecking=no" ./palworld/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
+        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ./palworld/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
         ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data'
         rm -r palworld
 
