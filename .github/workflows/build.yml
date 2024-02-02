@@ -63,8 +63,6 @@ jobs:
     - name: Create folders on remote host
       run: |
         ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'mkdir -p /data/Pal/Saved/SaveGames'
-        && chmod -R 777 /data
-        aws s3 cp s3://game-files-maximumpigs/palworld/SaveGames /data/Pal/Saved/SaveGames --recursive
 
     - name: Copy game files from S3
       run: |
