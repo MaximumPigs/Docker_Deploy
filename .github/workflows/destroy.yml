@@ -39,6 +39,12 @@ jobs:
       working-directory: ./Infra
       run: |
         terraform init -backend-config="backend.hcl"
+  
+    # Applies Terraform config - Updates whitelisting
+    - name: Terraform Apply AWS
+      working-directory: ./Infra
+      run: |
+        terraform apply -auto-approve
         terraform refresh
 
     - name: Set some environment variables
@@ -47,13 +53,6 @@ jobs:
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
-  
-    # Applies Terraform config - Updates whitelisting
-    - name: Terraform Apply AWS
-      working-directory: ./Infra
-      run: |
-        terraform apply -auto-approve
-        terraform refresh
 
     - name: Fetch game files
       run: |
