@@ -44,19 +44,19 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      working-directory: ./Infra
+      working-directory: Infra
       run: |
         terraform init -backend-config="backend.hcl"
 
     # Applies Terraform config
     - name: Terraform Apply AWS
-      working-directory: ./Infra
+      working-directory: Infra
       run: |
         terraform apply -auto-approve
         terraform refresh
 
     - name: Variables AWS
-      working-directory: ./Infra
+      working-directory: Infra
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
@@ -87,15 +87,15 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init Docker
-      working-directory: ./Docker
+      working-directory: Docker
       run: terraform init -backend-config="backend.hcl"
 
     # Generates an execution plan for Terraform
     - name: Terraform Apply Docker
-      working-directory: ./Docker
+      working-directory: Docker
       run: terraform apply -auto-approve
 
     # Gets Terraform state and generates cost using cost.modules.tf
     - name: Terraform Get Cost AWS
-      working-directory: ./Infra
+      working-directory: Infra
       run: 'terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY'      
