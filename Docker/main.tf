@@ -19,6 +19,7 @@ resource "docker_container" "container" {
   }
 
   env = [
+    "SERVER_SETTINGS_MODE",
     "ALWAYS_UPDATE_ON_START=true",
     "MAX_PLAYERS=32",
     "MULTITHREAD_ENABLED=true",
@@ -29,7 +30,6 @@ resource "docker_container" "container" {
     "PUBLIC_PORT=8211",
     "SERVER_NAME=[AU]BroWorld",
     "SERVER_DESCRIPTION=BroWorld, Bro",
-    "SERVER_PASSWORD=",
     "ADMIN_PASSWORD=Icecream420Sandwich69Nice!",
     "SERVER_PASSWORD=Icecream420Sandwich69Nice"
   ]

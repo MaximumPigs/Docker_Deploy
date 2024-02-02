@@ -64,6 +64,5 @@ jobs:
 
     - name: Copy game files to S3
       run: |
-        aws s3 rm s3://game-files-maximumpigs/palworld/ --recursive
-        aws s3 cp ./palworld s3://game-files-maximumpigs/palworld/ --recursive --exclude '*/backup/*'
+        aws s3 sync ./palworld s3://game-files-maximumpigs/palworld/ --exclude '*/backup/*'
         rm -r palworld
