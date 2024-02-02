@@ -6,13 +6,13 @@ variable "instance_ip" {
 }
 
 variable "server_password" {
-  type    = string
-  default = ""
+  type      = string
+  default   = ""
   sensitive = true
 }
 
 variable "github_webhook" {
-  type    = string
-  default = ""
+  type      = string
+  default   = ""
   sensitive = true
 }
