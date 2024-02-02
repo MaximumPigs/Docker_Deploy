@@ -30,10 +30,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_wrapper: false
-
-    # Install AWS CLI
-    # - uses: aws-actions/setup-sam@v2    
+        terraform_wrapper: false 
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -60,20 +57,15 @@ jobs:
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
         sleep 60s
 
-    - name: Create folders on remote host
-      run: |
-        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'mkdir -p /data/Pal/Saved/SaveGames'
-
     - name: Copy game files from S3
       run: |
-        aws s3 cp s3://game-files-maximumpigs/palworld/Pal/Saved/SaveGames ./SaveGames --recursive
-        ls -laR SaveGames
+        aws s3 cp s3://game-files-maximumpigs/palworld/ ./palworld --recursive
 
     - name: Place game files
       run: |
-        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ./SaveGames/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames
-        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data && ls -laR /data/Pal/Saved/SaveGames'
-        rm -r SaveGames/*
+        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ./palworld/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
+        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data'
+        rm -r palworld
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init Docker
@@ -86,9 +78,10 @@ jobs:
       run: |
         terraform apply -auto-approve
         terraform refresh
-        terraform output instance_ip >> $GITHUB_STEP_SUMMARY'
 
     # Gets Terraform state and generates cost using cost.modules.tf
     - name: Terraform Get Cost AWS
       working-directory: Infra
-      run: 'terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY'
+      run: |
+        terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY
+        terraform output instance_ip >> $GITHUB_STEP_SUMMARY

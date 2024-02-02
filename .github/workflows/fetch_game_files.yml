@@ -52,16 +52,12 @@ jobs:
       run: | 
         terraform apply -auto-approve
         terraform refresh
-
-    - name: Fetch game files
+  
+    - name: Place game files
       run: |
-        rm -r ./SaveGames/*
-        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames ./SaveGames/
+        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/* ./palworld/
 
-    - name: Copy game files to S3
-      uses: jakejarvis/s3-sync-action@master
-      env:
-        AWS_S3_BUCKET: game-files-maximumpigs
-        AWS_REGION: ap-southeast-2
-        SOURCE_DIR: ./SaveGames
-        DEST_DIR: /palworld/SaveGames
+    - name: Copy game files from S3
+      run: |
+        aws s3 cp ./palworld s3://game-files-maximumpigs/palworld/ --recursive
+        rm -r palworld
