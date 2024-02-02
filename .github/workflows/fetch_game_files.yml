@@ -13,7 +13,10 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}   
       AWS_DEFAULT_REGION: "ap-southeast-2"
-      TF_VAR_my_ip: ${{ secrets.MY_IP }}      
+      TF_VAR_my_ip: ${{ secrets.MY_IP }}
+      TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
+      TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:

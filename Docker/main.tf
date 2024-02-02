@@ -30,8 +30,10 @@ resource "docker_container" "container" {
     "PUBLIC_PORT=8211",
     "SERVER_NAME=[AU]BroWorld",
     "SERVER_DESCRIPTION=BroWorld, Bro",
-    "ADMIN_PASSWORD=Icecream420Sandwich69Nice!",
-    "SERVER_PASSWORD=Icecream420Sandwich69Nice"
+    "ADMIN_PASSWORD=${var.server_password}!",
+    "SERVER_PASSWORD=${var.server_password}",
+    "WEBHOOK_ENABLED=true",
+    "WEBHOOK_URL=${var.github_webhook}"
   ]
 
   mounts {
