@@ -57,30 +57,25 @@ jobs:
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
-        ssh-add && ssh-add ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
         sleep 60s
 
-    - name: Copy down S3 files
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ env.TF_VAR_instance_ip }}
-        username: ubuntu
-        port: 22
-        envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION
-        script: |
-          mkdir -p /data/Pal/Saved/SaveGames
-          aws s3 cp s3://game-files-maximumpigs/palworld/SaveGames /data/Pal/Saved/SaveGames --recursive
-          chmod -R 777 /data
+    - name: Create folders on remote host
+      run: |
+        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa 'mkdir -p /data/Pal/Saved/SaveGames'
+        && chmod -R 777 /data
+        aws s3 cp s3://game-files-maximumpigs/palworld/SaveGames /data/Pal/Saved/SaveGames --recursive
 
-    # - name: Copy game files from S3
-    #   run: |
-    #     aws s3 cp s3://game-files-maximumpigs/palworld/SaveGames ./SaveGames --recursive
+    - name: Copy game files from S3
+      run: |
+        aws s3 cp s3://game-files-maximumpigs/palworld/SaveGames ./SaveGames --recursive
+        ls -laR SaveGames
 
-    # - name: Place game files
-    #   run: |
-    #     scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ./SaveGames/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames
-    #     rm -r ./SaveGames/*
+    - name: Place game files
+      run: |
+        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ./SaveGames/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames
+        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa 'chmod -R 777 /data && ls -laR /data/Pal/Saved/SaveGames'
+        rm -r SaveGames/*
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init Docker
