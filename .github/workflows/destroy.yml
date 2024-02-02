@@ -72,3 +72,9 @@ jobs:
       id: AWS_Destroy
       working-directory: ./Infra
       run: terraform destroy -auto-approve
+
+    - name: Discord Webhook Action
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+        content: "Palworld server is offline now. Bye"      
