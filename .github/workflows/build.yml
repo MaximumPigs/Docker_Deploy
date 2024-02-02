@@ -55,7 +55,6 @@ jobs:
     - name: Variables AWS
       working-directory: Infra
       run: |
-        ls ../Docker/id_rsa
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
@@ -84,7 +83,10 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Apply Docker
       working-directory: Docker
-      run: terraform apply -auto-approve
+      run: |
+        terraform apply -auto-approve
+        terraform refresh
+        terraform output instance_ip >> $GITHUB_STEP_SUMMARY'
 
     # Gets Terraform state and generates cost using cost.modules.tf
     - name: Terraform Get Cost AWS
