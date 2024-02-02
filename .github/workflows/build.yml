@@ -21,12 +21,13 @@ jobs:
         shell: bash
 
     steps:
+
+    # Clean the runner
+    - uses: AutoModality/action-clean@v1      
+
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
-
-    # Clean the runner
-    - uses: AutoModality/action-clean@v1
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
@@ -35,7 +36,7 @@ jobs:
         terraform_wrapper: false
 
     # Install AWS CLI
-    - uses: aws-actions/setup-sam@v2    
+    # - uses: aws-actions/setup-sam@v2    
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
