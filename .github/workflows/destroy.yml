@@ -57,7 +57,6 @@ jobs:
 
     - name: Place game files
       run: |
-        rm -r palworld
         mkdir -p palworld/Pal/Saved/SaveGames
         mkdir -p palworld/Pal/Saved/Config/LinuxServer
         scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames/* palworld/Pal/Saved/SaveGames/
