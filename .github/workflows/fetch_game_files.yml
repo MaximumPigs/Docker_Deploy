@@ -2,9 +2,6 @@ name: 'Fetch Game Files'
 
 on:
   workflow_dispatch:
-
-  repository_dispatch:
-    types: [fetch]
   
 permissions:
   contents: read
