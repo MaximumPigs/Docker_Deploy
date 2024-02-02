@@ -55,6 +55,7 @@ jobs:
     - name: Variables AWS
       working-directory: Infra
       run: |
+        ls ../Docker/id_rsa
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
@@ -66,13 +67,13 @@ jobs:
 
     - name: Copy game files from S3
       run: |
-        aws s3 cp s3://game-files-maximumpigs/palworld/SaveGames ./SaveGames --recursive
+        aws s3 cp s3://game-files-maximumpigs/palworld/Pal/Saved/SaveGames ./SaveGames --recursive
         ls -laR SaveGames
 
     - name: Place game files
       run: |
         scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ./SaveGames/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames
-        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'chmod -R 777 /data && ls -laR /data/Pal/Saved/SaveGames'
+        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data && ls -laR /data/Pal/Saved/SaveGames'
         rm -r SaveGames/*
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
@@ -89,6 +90,3 @@ jobs:
     - name: Terraform Get Cost AWS
       working-directory: Infra
       run: 'terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY'
-
-    # Clean the runner
-    - uses: AutoModality/action-clean@v1  
