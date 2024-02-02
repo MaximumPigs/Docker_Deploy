@@ -90,4 +90,4 @@ jobs:
       uses: tsickert/discord-webhook@v5.3.0
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-        content: 'Palworld server is now running at ${{ env.TF_VAR_instance_ip }}, cost is ${terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/}'
+        content: 'Palworld server is now running at ${{ env.TF_VAR_instance_ip }}'

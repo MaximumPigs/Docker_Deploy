@@ -54,8 +54,7 @@ jobs:
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV     
-        echo "PRICE=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/)" >> $GITHUB_ENV
-        echo "${{ env.PRICE }}"
+        echo "PRICE=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ | cut -d' ' -f2 | cut -d',' -f1 )" >> $GITHUB_ENV
 
     - name: Place game files
       run: |
@@ -69,8 +68,8 @@ jobs:
         aws s3 sync ./palworld s3://game-files-maximumpigs/palworld/ --exclude '*/backup/*'
         rm -r palworld
 
-    # - name: Discord Webhook Action
-    #   uses: tsickert/discord-webhook@v5.3.0
-    #   with:
-    #     webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-    #     content: "Palworld server files saved, cost is ${{ env.PRICE }}"
+    - name: Discord Webhook Action
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+        content: "Palworld server files saved"
