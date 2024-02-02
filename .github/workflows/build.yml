@@ -63,7 +63,7 @@ jobs:
 
     - name: Place game files
       run: |
-        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ./palworld/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
+        rsync -ur -i ./Docker/id_rsa -e "ssh -o StrictHostKeyChecking=no" ./palworld/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
         ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data'
         rm -r palworld
 
@@ -85,3 +85,9 @@ jobs:
       run: |
         terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY
         terraform output instance_ip >> $GITHUB_STEP_SUMMARY
+      
+    - name: Discord Webhook Action
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+        content: 'Palworld server is now running at ${{ env.TF_VAR_instance_ip }}, cost is ${terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/}'

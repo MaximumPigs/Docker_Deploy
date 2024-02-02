@@ -59,10 +59,16 @@ jobs:
       run: |
         mkdir -p palworld/Pal/Saved/SaveGames
         mkdir -p palworld/Pal/Saved/Config/LinuxServer
-        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames/* palworld/Pal/Saved/SaveGames/
-        scp -r -i ./Docker/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/Config/LinuxServer/GameUserSettings.ini palworld/Pal/Saved/Config/LinuxServer/
+        rsync -ur -i ./Docker/id_rsa -e "ssh -o StrictHostKeyChecking=no" ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames/* palworld/Pal/Saved/SaveGames/
+        rsync -ur -i ./Docker/id_rsa -e "ssh -o StrictHostKeyChecking=no" ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/Config/LinuxServer/GameUserSettings.ini palworld/Pal/Saved/Config/LinuxServer/
 
     - name: Copy game files to S3
       run: |
         aws s3 sync ./palworld s3://game-files-maximumpigs/palworld/ --exclude '*/backup/*'
         rm -r palworld
+
+    - name: Discord Webhook Action
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+        content: 'Palworld server files saved, cost is ${terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/}'

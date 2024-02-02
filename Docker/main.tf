@@ -19,7 +19,7 @@ resource "docker_container" "container" {
   }
 
   env = [
-    "SERVER_SETTINGS_MODE",
+    "SERVER_SETTINGS_MODE=auto",
     "ALWAYS_UPDATE_ON_START=true",
     "MAX_PLAYERS=32",
     "MULTITHREAD_ENABLED=true",
