@@ -25,6 +25,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    # Clean the runner
+    - uses: AutoModality/action-clean@v1
+
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -56,6 +59,7 @@ jobs:
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
+        ssh-add ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
         sleep 60s
 
@@ -64,14 +68,12 @@ jobs:
       with:
         host: ${{ env.TF_VAR_instance_ip }}
         username: ubuntu
-        key_path: ./Docker/id_rsa
         port: 22
         envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION
         script: |
           mkdir -p /data/Pal/Saved/SaveGames
           aws s3 cp s3://game-files-maximumpigs/palworld/SaveGames /data/Pal/Saved/SaveGames --recursive
           chmod -R 777 /data
-
 
     # - name: Copy game files from S3
     #   run: |
