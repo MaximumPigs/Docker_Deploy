@@ -28,7 +28,7 @@ resource "docker_container" "container" {
     internal = 15637
     external = 15637
     protocol = "tcp"
-  }  
+  }
 
   env = [
     "SERVER_NAME=[AU]BroShrouded",
