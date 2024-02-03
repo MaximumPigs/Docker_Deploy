@@ -33,7 +33,9 @@ resource "docker_container" "container" {
     "ADMIN_PASSWORD=${var.server_password}!",
     "SERVER_PASSWORD=${var.server_password}",
     "WEBHOOK_ENABLED=true",
-    "WEBHOOK_URL=${var.discord_webhook}"
+    "WEBHOOK_URL=${var.discord_webhook}",
+    "WEBHOOK_START_TITLE=Server is up",
+    "WEBHOOK_START_DESCRIPTION=The gameserver is up, at ${var.instance_ip}:8211, join now with password ${var.server_password}"
   ]
 
   mounts {
