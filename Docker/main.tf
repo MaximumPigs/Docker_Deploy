@@ -33,7 +33,7 @@ resource "docker_container" "container" {
     "ADMIN_PASSWORD=${var.server_password}!",
     "SERVER_PASSWORD=${var.server_password}",
     "WEBHOOK_ENABLED=true",
-    "WEBHOOK_URL=${var.github_webhook}"
+    "WEBHOOK_URL=${var.discord_webhook}"
   ]
 
   mounts {

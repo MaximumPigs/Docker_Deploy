@@ -2,7 +2,7 @@
 
 variable "instance_ip" {
   type    = string
-  default = "3.25.127.56"
+  default = "3.106.164.103"
 }
 
 variable "server_password" {
@@ -11,7 +11,7 @@ variable "server_password" {
   sensitive = true
 }
 
-variable "github_webhook" {
+variable "discord_webhook" {
   type      = string
   default   = ""
   sensitive = true
