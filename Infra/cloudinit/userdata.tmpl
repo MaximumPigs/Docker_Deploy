@@ -36,5 +36,5 @@ system_info:
      - "${gen_key}"
 
 runcmd:
-  - mkdir -p /data/{palworld,enshrouded}
+  - for dir in palworld enshrouded; do mkdir -p /data/$dir; done
   - chmod -R 777 /data

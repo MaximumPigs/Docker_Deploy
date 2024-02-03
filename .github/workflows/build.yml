@@ -3,6 +3,9 @@ name: 'Apply'
 on:
   workflow_dispatch:
 
+  repository_dispatch:
+    types: [build]
+
 permissions:
   contents: read
 
@@ -16,6 +19,7 @@ jobs:
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+      TF_VAR_game: "palworld"
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -76,13 +80,13 @@ jobs:
 
     - name: Copy game files from S3
       run: |
-        aws s3 cp s3://game-files-maximumpigs/palworld/ ./palworld --recursive
+        aws s3 cp s3://game-files-maximumpigs/${{ env.TF_VAR_game }}/ ./${{ env.TF_VAR_game }} --recursive
 
     - name: Place game files
       run: |
-        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ./palworld/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
+        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ./${{ env.TF_VAR_game }}/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
         ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data'
-        rm -r palworld
+        rm -r ${{ env.TF_VAR_game }}
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init Docker

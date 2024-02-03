@@ -3,6 +3,9 @@ name: 'Destroy'
 on:
   workflow_dispatch:
 
+  repository_dispatch:
+    types: [destroy]
+
 permissions:
   contents: read
 
