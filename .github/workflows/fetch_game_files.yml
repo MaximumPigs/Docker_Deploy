@@ -17,7 +17,6 @@ jobs:
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
 
-
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
@@ -68,7 +67,7 @@ jobs:
 
     - name: Copy game files to S3
       run: |
-        aws s3 sync ./palworld s3://game-files-maximumpigs/palworld/ --exclude '*/backup/*'
+        aws s3 sync ./palworld s3://game-files-maximumpigs/palworld/
         rm -r palworld
 
     - name: Discord Webhook Action

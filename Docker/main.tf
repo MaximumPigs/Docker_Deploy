@@ -21,10 +21,10 @@ resource "docker_container" "container" {
   env = [
     "SERVER_SETTINGS_MODE=auto",
     "ALWAYS_UPDATE_ON_START=true",
-    "MAX_PLAYERS=32",
+    "MAX_PLAYERS=10",
     "MULTITHREAD_ENABLED=true",
-    "COMMUNITY_SERVER=true",
-    "RCON_ENABLED=true",
+    "COMMUNITY_SERVER=false",
+    "RCON_ENABLED=false",
     "RCON_PORT=25575",
     "PUBLIC_IP=${var.instance_ip}",
     "PUBLIC_PORT=8211",
