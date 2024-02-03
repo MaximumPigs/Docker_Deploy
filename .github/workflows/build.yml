@@ -86,7 +86,7 @@ jobs:
 
     - name: Place game files
       run: |
-        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ./${{ env.TF_VAR_game }}/* ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
+        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ./${{ env.TF_VAR_game }}/ ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
         ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data'
         rm -r ${{ env.TF_VAR_game }}
 
