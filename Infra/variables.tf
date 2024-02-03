@@ -12,9 +12,12 @@ variable "my_ip" {
   default = ""
 }
 
-# infra
-
 variable "instance_state" {
   type    = string
   default = "running"
+}
+
+variable "game" {
+  type    = string
+  default = "enshrouded"
 }

@@ -2,7 +2,7 @@
 
 variable "instance_ip" {
   type    = string
-  default = "54.252.195.0"
+  default = ""
 }
 
 variable "server_password" {
@@ -13,11 +13,6 @@ variable "server_password" {
 
 variable "discord_webhook" {
   type      = string
-  default   = ""
+  default   = null
   sensitive = true
-}
-
-variable "game" {
-  type    = string
-  default = ""
 }

@@ -35,39 +35,3 @@ resource "aws_default_route_table" "route" {
     name = "Route"
   }
 }
-
-resource "aws_security_group" "security_group" {
-  name        = "security_group"
-  description = "firewall rules"
-  vpc_id      = aws_vpc.vpc.id
-}
-
-resource "aws_security_group_rule" "ssh_inbound" {
-  type              = "ingress"
-  security_group_id = aws_security_group.security_group.id
-  description       = "SSH Inbound from runner and my OP"
-  from_port         = 22
-  cidr_blocks       = ["${coalesce(var.my_ip, "192.168.0.1")}/32", "${chomp(data.http.myip.response_body)}/32"]
-  to_port           = 22
-  protocol          = "tcp"
-}
-
-resource "aws_security_group_rule" "game_server" {
-  type              = "ingress"
-  security_group_id = aws_security_group.security_group.id
-  description       = "Game Server Inbound"
-  from_port         = 8211
-  cidr_blocks       = ["0.0.0.0/0"]
-  to_port           = 8211
-  protocol          = "udp"
-}
-
-resource "aws_security_group_rule" "all" {
-  type              = "egress"
-  security_group_id = aws_security_group.security_group.id
-  description       = "all outbound"
-  from_port         = 0
-  to_port           = 0
-  cidr_blocks       = ["0.0.0.0/0"]
-  protocol          = -1
-}
