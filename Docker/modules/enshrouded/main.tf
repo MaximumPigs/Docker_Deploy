@@ -42,6 +42,6 @@ resource "docker_container" "container" {
   mounts {
     type   = "bind"
     target = "/home/steam/enshrouded/savegame"
-    source = "/data/enshrouded"
+    source = "/data"
   }
 }

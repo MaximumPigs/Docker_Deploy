@@ -19,7 +19,7 @@ jobs:
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
-      TF_VAR_game: "palworld"
+      TF_VAR_game: ${{ github.event.client_payload.game || 'palworld' }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -46,7 +46,9 @@ jobs:
     - name: Terraform Init
       working-directory: Infra
       run: |
-        terraform init -backend-config="backend.hcl"
+        terraform init \
+        -backend-config="backend.hcl" \
+        -backend-config="key=state/game_servers/${{ env.TF_VAR_game }}/infra.tfstate"
 
     # Applies Terraform config
     - name: Terraform Apply AWS
@@ -67,7 +69,7 @@ jobs:
       uses: tsickert/discord-webhook@v5.3.0
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-        content: 'Palworld server is starting, wait for completion message. - Running cost per hour for this server is $${{ env.PRICE }} USD'
+        content: '${{ env.TF_VAR_game }} server is starting, wait for completion message. - Running cost per hour for this server is $${{ env.PRICE }} USD'
 
     - name: Variables AWS
       working-directory: Infra
@@ -89,9 +91,12 @@ jobs:
         rm -r ${{ env.TF_VAR_game }}
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init Docker
-      working-directory: Docker
-      run: terraform init -backend-config="backend.hcl"
+    - name: Terraform Init
+      working-directory: Infra
+      run: |
+        terraform init \
+        -backend-config="backend.hcl" \
+        -backend-config="key=state/game_servers/${{ env.TF_VAR_game }}/docker.tfstate"
 
     # Generates an execution plan for Terraform
     - name: Terraform Apply Docker
