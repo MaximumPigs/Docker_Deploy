@@ -87,8 +87,8 @@ jobs:
         aws s3 sync ./palworld s3://game-files-maximumpigs/palworld/
         rm -r palworld
 
-    # - name: Discord Webhook Action
-    #   uses: tsickert/discord-webhook@v5.3.0
-    #   with:
-    #     webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-    #     content: "${{ env.TF_VAR_game }} server files saved"
+    - name: Discord Webhook Action
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+        content: "${{ env.TF_VAR_game }} server files saved"
