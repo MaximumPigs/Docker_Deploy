@@ -7,7 +7,7 @@ locals {
     },
     enshrouded = {
       name      = "enshrouded"
-      vm_size   = "t2.small"
+      vm_size   = "t2.medium"
       disk_size = "40"
     }
   }

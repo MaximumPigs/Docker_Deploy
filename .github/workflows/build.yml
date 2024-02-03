@@ -70,7 +70,8 @@ jobs:
       uses: tsickert/discord-webhook@v5.3.0
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-        content: '${{ env.TF_VAR_game }} server is starting, wait for completion message. - Running cost per hour for this server is $${{ env.PRICE }} USD'
+        content: |
+          '${{ env.TF_VAR_game }} server is starting, wait for completion message.\nServer IP will be ${{ env.TF_VAR_instance_ip }}\nServer Password will be ${{ env.TF_VAR_server_password }}\nRunning cost per hour for this server is $${{ env.PRICE }} USD'
 
     - name: Variables AWS
       working-directory: Infra
