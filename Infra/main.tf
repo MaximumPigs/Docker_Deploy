@@ -1,7 +1,7 @@
 resource "aws_instance" "my_instance" {
 
   ami                         = "ami-08f0bc76ca5236b20"
-  instance_type               = "t2.medium"
+  instance_type               = local.games[var.game].vm_size
   key_name                    = var.key_pair
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.subnet.id
@@ -9,18 +9,12 @@ resource "aws_instance" "my_instance" {
 
   root_block_device {
     delete_on_termination = true
-    volume_size           = "8"
+    volume_size           = local.games[var.game].disk_size
   }
 
   tags = {
-    "name" = "Instance"
+    "name" = local.games[var.game].name
   }
 
-  user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh }))
-}
-
-
-resource "aws_ec2_instance_state" "power" {
-  instance_id = aws_instance.my_instance.id
-  state       = var.instance_state
+  user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh, game = var.game }))
 }
