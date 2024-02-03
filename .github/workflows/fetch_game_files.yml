@@ -67,7 +67,7 @@ jobs:
 #PALWORLD
 
     - name: Place game files
-      if: ${{ env.TF_VAR_game }} == 'palworld'
+      if: env.TF_VAR_game == 'palworld'
       run: |
         mkdir -p palworld/Pal/Saved/SaveGames
         mkdir -p palworld/Pal/Saved/Config/LinuxServer
@@ -77,11 +77,10 @@ jobs:
 #ENSHROUDED
 
     - name: Place game files
-      if: ${{ env.TF_VAR_game }} == 'enshrouded'
+      if: env.TF_VAR_game == 'enshrouded'
       run: |
         mkdir -p enshrouded
-        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ubuntu@${{ env.TF_VAR_instance_ip }}:/data/* palworld/
-
+        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ubuntu@${{ env.TF_VAR_instance_ip }}:/data/* enshrouded/
 
     - name: Copy game files to S3
       run: |
