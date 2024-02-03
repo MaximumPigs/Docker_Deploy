@@ -51,6 +51,20 @@ jobs:
         terraform apply -auto-approve
         terraform refresh
 
+    # Gets Terraform state and generates cost using cost.modules.tf
+    - name: Terraform Get Cost AWS
+      working-directory: Infra
+      run: |
+        terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY
+        echo "\r\n" >> $GITHUB_STEP_SUMMARY
+        terraform output instance_ip >> $GITHUB_STEP_SUMMARY
+      
+    - name: Discord Webhook Action
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+        content: 'Palworld server is starting, wait for completion message. - Running cost per hour for this server is $${{ env.PRICE }} USD'        
+
     - name: Variables AWS
       working-directory: Infra
       run: |
@@ -80,17 +94,3 @@ jobs:
       working-directory: Docker
       run: |
         terraform apply -auto-approve
-        terraform refresh
-
-    # Gets Terraform state and generates cost using cost.modules.tf
-    - name: Terraform Get Cost AWS
-      working-directory: Infra
-      run: |
-        terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY
-        terraform output instance_ip >> $GITHUB_STEP_SUMMARY
-      
-    - name: Discord Webhook Action
-      uses: tsickert/discord-webhook@v5.3.0
-      with:
-        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-        content: 'Palworld server is starting, wait for completion message. - Running cost per hour for this server is $${{ env.PRICE }} USD'
