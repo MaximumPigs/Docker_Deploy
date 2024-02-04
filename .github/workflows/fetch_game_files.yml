@@ -84,8 +84,9 @@ jobs:
 
     - name: Copy game files to S3
       run: |
-        aws s3 sync ./palworld s3://game-files-maximumpigs/palworld/
-        rm -r palworld
+        aws s3 sync ./${{ env.TF_VAR_game }} s3://game-files-maximumpigs/${{ env.TF_VAR_game }}/
+        rm -r ${{ env.TF_VAR_game }}
+
 
     - name: Discord Webhook Action
       uses: tsickert/discord-webhook@v5.3.0
