@@ -40,4 +40,8 @@ jobs:
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
         content: |
-          ${{ env.TF_VAR_game }} server is starting, wait for completion message.\nServer IP: ${{ env.TF_VAR_instance_ip }}\nServer Name: ${{ env.TF_VAR_server_name }}\nServer Password: ${{ env.TF_VAR_server_password }}\nRunning Cost: $${{ env.PRICE }} USD p/hour
+          ${{ env.TF_VAR_game }} server is starting, wait for completion message.
+          Server IP: ${{ env.TF_VAR_instance_ip }}
+          Server Name: ${{ env.TF_VAR_server_name }}
+          Server Password: ${{ env.TF_VAR_server_password }}
+          Running Cost: $${{ env.PRICE }} USD p/hour
