@@ -1,10 +1,10 @@
-name: 'Apply'
+name: 'Start'
 
 on:
   workflow_dispatch:
 
   repository_dispatch:
-    types: [build]
+    types: [start]
 
 permissions:
   contents: read
@@ -63,7 +63,7 @@ jobs:
       run: |
         terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY
         echo "PRICE=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ | cut -d' ' -f2 | cut -d',' -f1 )" >> $GITHUB_ENV        
-        echo "\r\n" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
         terraform output instance_ip >> $GITHUB_STEP_SUMMARY
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV        
       

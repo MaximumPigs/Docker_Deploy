@@ -1,10 +1,10 @@
-name: 'Fetch Game Files'
+name: 'Stop'
 
 on:
   workflow_dispatch:
 
   repository_dispatch:
-    types: [fetch]    
+    types: [stop]
 
 permissions:
   contents: read
@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}   
-      AWS_DEFAULT_REGION: "ap-southeast-2"
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_DEFAULT_REGION: "ap-southeast-2"      
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
@@ -48,11 +48,11 @@ jobs:
         terraform init \
         -backend-config="backend.hcl" \
         -backend-config="key=state/game_servers/${{ env.TF_VAR_game }}/infra.tfstate"
-
-    # Applies Terraform config - Required here to update runner_ip firewall rule
-    - name: Terraform Apply
+  
+    # Applies Terraform config - Updates whitelisting
+    - name: Terraform Apply AWS
       working-directory: ./Infra
-      run: | 
+      run: |
         terraform apply -auto-approve
         terraform refresh
 
@@ -61,8 +61,7 @@ jobs:
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
-        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV     
-        echo "PRICE=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ | cut -d' ' -f2 | cut -d',' -f1 )" >> $GITHUB_ENV
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
 
 #PALWORLD
 
@@ -87,9 +86,14 @@ jobs:
         aws s3 sync ./${{ env.TF_VAR_game }} s3://game-files-maximumpigs/${{ env.TF_VAR_game }}/
         rm -r ${{ env.TF_VAR_game }}
 
+    # Destroys AWS infra
+    - name: Terraform Destroy AWS
+      id: AWS_Destroy
+      working-directory: ./Infra
+      run: terraform destroy -auto-approve
 
     - name: Discord Webhook Action
       uses: tsickert/discord-webhook@v5.3.0
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-        content: "${{ env.TF_VAR_game }} server files saved"
+        content: "${{ env.TF_VAR_game }} server is offline now. Bye"      
