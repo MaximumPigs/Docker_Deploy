@@ -1,0 +1,43 @@
+name: 'Start'
+
+on:
+  workflow_dispatch:
+
+  repository_dispatch:
+    types: [start]
+
+permissions:
+  contents: read
+
+jobs:
+  terraform_AWS:
+    runs-on: ubuntu-latest
+    env: 
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_DEFAULT_REGION: "ap-southeast-2"
+      TF_VAR_my_ip: ${{ secrets.MY_IP }}
+      TF_VAR_instance_ip: "123.123.123.123"
+      PRICE: "0.05"      
+      TF_VAR_game: ${{ github.event.client_payload.game || 'palworld' }}
+      TF_VAR_server_name: "[AU]Bro-${{ github.event.client_payload.game }}"
+      TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
+      TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Discord Webhook Action
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+        content: |
+          ${{ env.TF_VAR_game }} server is starting, wait for completion message.\nServer IP: ${{ env.TF_VAR_instance_ip }}\nServer Name: ${{ env.TF_VAR_server_name }}\nServer Password: ${{ env.TF_VAR_server_password }}\nRunning Cost: $${{ env.PRICE }} USD p/hour

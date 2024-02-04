@@ -17,9 +17,10 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
       AWS_DEFAULT_REGION: "ap-southeast-2"
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
+      TF_VAR_game: ${{ github.event.client_payload.game || 'palworld' }}
+      TF_VAR_server_name: "[AU]Bro-${{ github.event.client_payload.game }}"
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
-      TF_VAR_game: ${{ github.event.client_payload.game || 'palworld' }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -72,7 +73,7 @@ jobs:
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
         content: |
-          ${{ env.TF_VAR_game }} server is starting, wait for completion message.\nServer IP will be ${{ env.TF_VAR_instance_ip }}\nServer Password will be ${{ env.TF_VAR_server_password }}\nRunning cost per hour for this server is $${{ env.PRICE }} USD
+          ${{ env.TF_VAR_game }} server is starting, wait for completion message.\nServer IP: ${{ env.TF_VAR_instance_ip }}\nServer Name: ${{ env.TF_VAR_server_name }}\nServer Password: ${{ env.TF_VAR_server_password }}\nRunning Cost: $${{ env.PRICE }} USD p/hour
 
     - name: Prepare key file
       working-directory: Infra
