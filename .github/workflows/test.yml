@@ -10,7 +10,7 @@ on:
         options:
           - palworld
           - enshrouded
-          
+
   repository_dispatch:
     types: [test]
 
@@ -26,7 +26,7 @@ jobs:
       AWS_DEFAULT_REGION: "ap-southeast-2"
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
       TF_VAR_game: ${{ github.event.client_payload.game || github.event.inputs.game}}
-      TF_VAR_server_name: "[AU]Bro-${{ github.event.client_payload.game }}"
+      TF_VAR_server_name: "[AU]Bro-${{ github.event.client_payload.game || github.event.inputs.game }}"
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
       TF_VAR_instance_ip: "123.123.123.123"
