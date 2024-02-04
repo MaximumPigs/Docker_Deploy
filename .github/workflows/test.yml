@@ -2,7 +2,15 @@ name: 'Test'
 
 on:
   workflow_dispatch:
-
+    inputs: 
+      game:
+        description: 'Select Game'
+        required: true
+        type: choice
+        options:
+          - palworld
+          - enshrouded
+          
   repository_dispatch:
     types: [test]
 
@@ -41,6 +49,7 @@ jobs:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
         content: |
           ${{ env.TF_VAR_game }} server is starting, wait for completion message.
+
           Server IP: ${{ env.TF_VAR_instance_ip }}
           Server Name: ${{ env.TF_VAR_server_name }}
           Server Password: ${{ env.TF_VAR_server_password }}
