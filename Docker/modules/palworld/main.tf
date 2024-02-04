@@ -28,7 +28,7 @@ resource "docker_container" "container" {
     "RCON_PORT=25575",
     "PUBLIC_IP=${var.instance_ip}",
     "PUBLIC_PORT=8211",
-    "SERVER_NAME=[AU]BroPals",
+    "SERVER_NAME=${var.server_name}",
     "SERVER_DESCRIPTION=BroPals, Bro",
     "ADMIN_PASSWORD=${var.server_password}!",
     "SERVER_PASSWORD=${var.server_password}",

@@ -31,7 +31,7 @@ resource "docker_container" "container" {
   }
 
   env = [
-    "SERVER_NAME=[AU]BroShrouded",
+    "SERVER_NAME=${var.server_name}",
     "SERVER_PASSWORD=${var.server_password}",
     "SERVER_IP=${var.instance_ip}",
     "GAME_PORT=15636",

@@ -5,6 +5,11 @@ variable "instance_ip" {
   default = ""
 }
 
+variable "server_name" {
+  type      = string
+  default   = ""
+}
+
 variable "server_password" {
   type      = string
   default   = ""
