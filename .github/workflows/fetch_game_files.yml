@@ -56,7 +56,7 @@ jobs:
         terraform apply -auto-approve
         terraform refresh
 
-    - name: Set some environment variables
+    - name: Prepare key file and set some variables
       working-directory: ./Infra
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
