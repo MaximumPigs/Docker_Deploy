@@ -21,3 +21,8 @@ variable "game" {
   type    = string
   default = "enshrouded"
 }
+
+variable "runner_access_enabled" {
+  type    = bool
+  default = true
+}

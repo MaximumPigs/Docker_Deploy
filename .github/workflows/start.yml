@@ -113,3 +113,10 @@ jobs:
       working-directory: Docker
       run: |
         terraform apply -auto-approve
+
+    # Removes Github Runner access
+    - name: Terraform Apply AWS
+      working-directory: Infra
+      run: |
+        terraform apply -auto-approve \
+        -var='runner_access_enabled=false'

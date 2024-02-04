@@ -102,3 +102,10 @@ jobs:
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
         content: "${{ env.TF_VAR_game }} server files saved"
+
+    # Removes Github Runner access
+    - name: Terraform Apply AWS
+      working-directory: Infra
+      run: |
+        terraform apply -auto-approve \
+        -var='runner_access_enabled=false'        

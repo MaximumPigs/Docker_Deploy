@@ -13,7 +13,8 @@ resource "aws_vpc_security_group_egress_rule" "all" {
   ip_protocol       = -1
 }
 
-resource "aws_vpc_security_group_ingress_rule" "ssh_inbound_my_ip" {
+resource "aws_vpc_security_group_ingress_rule" "ssh_inbound_runner_ip" {
+  count             = var.runner_access_enabled == true ? 1 : 0
   security_group_id = aws_security_group.security_group.id
   description       = "SSH Inbound from runner and my OP"
   from_port         = 22
@@ -22,7 +23,7 @@ resource "aws_vpc_security_group_ingress_rule" "ssh_inbound_my_ip" {
   ip_protocol       = "tcp"
 }
 
-resource "aws_vpc_security_group_ingress_rule" "ssh_inbound_runner_ip" {
+resource "aws_vpc_security_group_ingress_rule" "ssh_inbound_my_ip" {
   security_group_id = aws_security_group.security_group.id
   description       = "SSH Inbound from runner and my OP"
   from_port         = 22
