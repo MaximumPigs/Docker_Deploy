@@ -2,6 +2,14 @@ name: 'Check'
 
 on:
   workflow_dispatch:
+    inputs: 
+      game:
+        description: 'Select Game'
+        required: true
+        type: choice
+        options:
+          - palworld
+          - enshrouded
 
   repository_dispatch:
     types:

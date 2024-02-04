@@ -1,10 +1,10 @@
-name: 'Start'
+name: 'Test'
 
 on:
   workflow_dispatch:
 
   repository_dispatch:
-    types: [start]
+    types: [test]
 
 permissions:
   contents: read
@@ -17,12 +17,12 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
       AWS_DEFAULT_REGION: "ap-southeast-2"
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
-      TF_VAR_instance_ip: "123.123.123.123"
-      PRICE: "0.05"      
-      TF_VAR_game: ${{ github.event.client_payload.game || 'palworld' }}
+      TF_VAR_game: ${{ github.event.client_payload.game || github.event.inputs.game}}
       TF_VAR_server_name: "[AU]Bro-${{ github.event.client_payload.game }}"
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+      TF_VAR_instance_ip: "123.123.123.123"
+      PRICE: "0.05"      
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
