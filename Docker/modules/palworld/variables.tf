@@ -6,8 +6,8 @@ variable "instance_ip" {
 }
 
 variable "server_name" {
-  type      = string
-  default   = ""
+  type    = string
+  default = ""
 }
 
 variable "server_password" {
