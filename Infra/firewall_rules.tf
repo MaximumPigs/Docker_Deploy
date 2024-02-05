@@ -32,36 +32,50 @@ resource "aws_vpc_security_group_ingress_rule" "ssh_inbound_my_ip" {
   ip_protocol       = "tcp"
 }
 
-# PALWORLD
+# Dynamic port based on game choice - defined in locals.tf
 
-resource "aws_vpc_security_group_ingress_rule" "palworld_server" {
-  count             = var.game == "palworld" ? 1 : 0
+resource "aws_vpc_security_group_ingress_rule" "Game_Inbound" {
+  for_each = {for index, port in local.games[var.game].ports: port.index => port}
+
   security_group_id = aws_security_group.security_group.id
-  description       = "Palworld Server Inbound"
-  from_port         = 8211
+  description       = "${var.game} Server Inbound Rule ${each.key}"
+  from_port         = each.value.start_port
   cidr_ipv4         = "0.0.0.0/0"
-  to_port           = 8211
-  ip_protocol       = "udp"
+  to_port           = each.value.end_port
+  ip_protocol       = each.value.protocol 
 }
 
-# ENSHROUDED
 
-resource "aws_vpc_security_group_ingress_rule" "enshrouded_server_udp" {
-  count             = var.game == "enshrouded" ? 1 : 0
-  security_group_id = aws_security_group.security_group.id
-  description       = "Enshrouded Server Inbound"
-  from_port         = 15636
-  cidr_ipv4         = "0.0.0.0/0"
-  to_port           = 15637
-  ip_protocol       = "udp"
-}
+# # PALWORLD
 
-resource "aws_vpc_security_group_ingress_rule" "enshrouded_server_tcp" {
-  count             = var.game == "enshrouded" ? 1 : 0
-  security_group_id = aws_security_group.security_group.id
-  description       = "Enshrouded Server Inbound"
-  from_port         = 15636
-  cidr_ipv4         = "0.0.0.0/0"
-  to_port           = 15637
-  ip_protocol       = "tcp"
-}
+# resource "aws_vpc_security_group_ingress_rule" "palworld_server" {
+#   count             = var.game == "palworld" ? 1 : 0
+#   security_group_id = aws_security_group.security_group.id
+#   description       = "Palworld Server Inbound"
+#   from_port         = 8211
+#   cidr_ipv4         = "0.0.0.0/0"
+#   to_port           = 8211
+#   ip_protocol       = "udp"
+# }
+
+# # ENSHROUDED
+
+# resource "aws_vpc_security_group_ingress_rule" "enshrouded_server_udp" {
+#   count             = var.game == "enshrouded" ? 1 : 0
+#   security_group_id = aws_security_group.security_group.id
+#   description       = "Enshrouded Server Inbound"
+#   from_port         = 15636
+#   cidr_ipv4         = "0.0.0.0/0"
+#   to_port           = 15637
+#   ip_protocol       = "udp"
+# }
+
+# resource "aws_vpc_security_group_ingress_rule" "enshrouded_server_tcp" {
+#   count             = var.game == "enshrouded" ? 1 : 0
+#   security_group_id = aws_security_group.security_group.id
+#   description       = "Enshrouded Server Inbound"
+#   from_port         = 15636
+#   cidr_ipv4         = "0.0.0.0/0"
+#   to_port           = 15637
+#   ip_protocol       = "tcp"
+# }
