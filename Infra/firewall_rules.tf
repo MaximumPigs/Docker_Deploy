@@ -35,12 +35,12 @@ resource "aws_vpc_security_group_ingress_rule" "ssh_inbound_my_ip" {
 # Dynamic port based on game choice - defined in locals.tf
 
 resource "aws_vpc_security_group_ingress_rule" "Game_Inbound" {
-  for_each = {for index, port in local.games[var.game].ports: port.index => port}
+  for_each = { for index, port in local.games[var.game].ports : port.index => port }
 
   security_group_id = aws_security_group.security_group.id
   description       = "${var.game} Server Inbound Rule ${each.key}"
   from_port         = each.value.start_port
   cidr_ipv4         = "0.0.0.0/0"
   to_port           = each.value.end_port
-  ip_protocol       = each.value.protocol 
+  ip_protocol       = each.value.protocol
 }
