@@ -3,7 +3,7 @@ locals {
     palworld = {
       name      = "palworld"
       vm_size   = "m6a.large"
-      disk_size = "10"
+      disk_size = "15"
       ports = [
         {
           index      = "1" # This is required as a unique key to use in the for_each loop
