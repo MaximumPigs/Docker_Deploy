@@ -13,8 +13,8 @@ resource "aws_instance" "my_instance" {
   }
 
   tags = {
-    "name" = local.games[var.game].name
+    "name" = var.game
   }
 
-  user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh, game = var.game }))
+  user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh }))
 }
