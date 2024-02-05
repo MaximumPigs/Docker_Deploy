@@ -2,7 +2,7 @@ locals {
   games = {
     palworld = {
       name      = "palworld"
-      vm_size   = "t3a.large"
+      vm_size   = "m6a.large"
       disk_size = "10"
       ports = [
         {
@@ -15,7 +15,7 @@ locals {
     },
     enshrouded = {
       name      = "enshrouded"
-      vm_size   = "t3a.large"
+      vm_size   = "m6a.large"
       disk_size = "40"
       ports = [
         {
