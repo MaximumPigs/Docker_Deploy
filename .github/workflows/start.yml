@@ -71,7 +71,7 @@ jobs:
       working-directory: Infra    
       run: |
         curl -sLO https://raw.githubusercontent.com/antonbabenko/terraform-cost-estimation/master/terraform.jq
-        echo "PRICE_JSON=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/)" >> GITHUB_ENV
+        echo "PRICE_JSON=$(terraform state pull | jq -cf terraform.jq | curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/)" >> GITHUB_ENV
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
 
     - name: Set some summary outputs
@@ -100,6 +100,9 @@ jobs:
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
+
+    - name: Sleep - wait for cloudinit
+      run: |
         sleep 60s
 
     - name: Copy game files from S3
