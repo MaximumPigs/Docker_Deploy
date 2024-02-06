@@ -21,5 +21,13 @@ resource "aws_instance" "my_instance" {
     cpu_credits = "standard"
   }
 
+  instance_market_options {
+    market_type = "spot"
+    spot_options {
+      instance_interruption_behavior = "terminate"
+      spot_instance_type             = "one-time"
+    }
+  }
+
   user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh }))
 }
