@@ -73,7 +73,7 @@ jobs:
         curl -sLO https://raw.githubusercontent.com/antonbabenko/terraform-cost-estimation/master/terraform.jq
         echo "PRICE_JSON=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/) >> GITHUB_ENV
         echo ${{env.PRICE_JSON}} >> $GITHUB_STEP_SUMMARY
-        $echo "PRICE=$(echo "${{env.PRICE_JSON}}" | cut -d' ' -f2 | cut -d',' -f1) >> $GITHUB_ENV     
+        echo "PRICE=$(echo "${{env.PRICE_JSON}}" | cut -d' ' -f2 | cut -d',' -f1) >> $GITHUB_ENV     
         echo "" >> $GITHUB_STEP_SUMMARY
         terraform output instance_ip >> $GITHUB_STEP_SUMMARY
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV        
