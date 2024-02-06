@@ -64,7 +64,6 @@ jobs:
       working-directory: Infra
       run: |
         terraform apply -auto-approve
-        terraform refresh
 
     # Gets Terraform state and generates cost using cost.modules.tf
     - name: Set some variables
