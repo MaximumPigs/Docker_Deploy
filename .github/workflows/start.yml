@@ -71,8 +71,8 @@ jobs:
       working-directory: Infra    
       run: |
         curl -sLO https://raw.githubusercontent.com/antonbabenko/terraform-cost-estimation/master/terraform.jq
-        echo "PRICE_JSON=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/) >> GITHUB_ENV
-        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV           
+        echo "PRICE_JSON=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/)" >> GITHUB_ENV
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
 
     - name: Set some summary outputs
       working-directory: Infra
@@ -93,7 +93,7 @@ jobs:
           Server IP: ${{ env.TF_VAR_instance_ip }}
           Server Name: ${{ env.TF_VAR_server_name }}
           Server Password: ${{ env.TF_VAR_server_password }}
-          Running Cost: ${ echo "$PRICE_JSON" | cut -d' ' -f2 | cut -d',' -f1 } USD p/hour
+          Running Cost: $( echo "$PRICE_JSON" | cut -d' ' -f2 | cut -d',' -f1 ) USD p/hour
           
     - name: Prepare key file
       working-directory: Infra
