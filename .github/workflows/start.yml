@@ -29,8 +29,8 @@ jobs:
       TF_VAR_server_name: "[AU]Bro-${{ github.event.client_payload.game || github.event.inputs.game }}"
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || '' }}
-      TF_VAR_AWS_BUCKET_ACCESS_KEY: ${{ secrets.TF_VAR_AWS_BUCKET_ACCESS_KEY }}
-      TF_VAR_AWS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.TF_VAR_AWS_BUCKET_SECRET_ACCESS_KEY }}
+      TF_VAR_AWS_BUCKET_ACCESS_KEY: ${{ secrets.AWS_BUCKET_ACCESS_KEY }}
+      TF_VAR_AWS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.AWS_BUCKET_SECRET_ACCESS_KEY }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
