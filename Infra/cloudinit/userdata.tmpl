@@ -37,9 +37,9 @@ system_info:
 write_files:
   - path: /etc/environment
     content: |
-      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY}"
-      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-      AWS_DEFAULT_REGION: "ap-southeast-2"
+      AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY}"
+      AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
+      AWS_DEFAULT_REGION="ap-southeast-2"
     append: true
 
 runcmd:
