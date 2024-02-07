@@ -2,12 +2,18 @@ resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/24"
 
   tags = {
-    "name" = "vpc"
+    "project" = "game_servers"
+    "game"    = var.game
   }
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    "project" = "game_servers"
+    "game"    = var.game
+  }
 }
 
 resource "aws_subnet" "subnet" {
@@ -19,7 +25,8 @@ resource "aws_subnet" "subnet" {
   cidr_block = "10.0.0.0/24"
 
   tags = {
-    "name" = "subnet"
+    "project" = "game_servers"
+    "game"    = var.game
   }
 }
 
@@ -32,6 +39,7 @@ resource "aws_default_route_table" "route" {
   }
 
   tags = {
-    name = "Route"
+    "project" = "game_servers"
+    "game"    = var.game
   }
 }

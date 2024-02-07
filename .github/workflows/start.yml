@@ -28,7 +28,7 @@ jobs:
       TF_VAR_game: ${{ github.event.client_payload.game || github.event.inputs.game}}
       TF_VAR_server_name: "[AU]Bro-${{ github.event.client_payload.game || github.event.inputs.game }}"
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
-      TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+      TF_VAR_discord_webhook: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || '' }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -57,7 +57,7 @@ jobs:
       run: |
         terraform init \
         -backend-config="backend.hcl" \
-        -backend-config="key=state/game_servers/${{ env.TF_VAR_game }}/infra.tfstate"
+        -backend-config="key=state/game_servers/${{ github.ref == 'refs/heads/main' && '' || 'dev/' }}${{ env.TF_VAR_game }}/infra.tfstate"
 
     # Applies Terraform config
     - name: Terraform Apply AWS
@@ -66,16 +66,23 @@ jobs:
         terraform apply -auto-approve
 
     # Gets Terraform state and generates cost using cost.modules.tf
-    - name: Set some variables
+    - name: Set some environment vars
+      working-directory: Infra    
+      run: |
+        curl -sLO https://raw.githubusercontent.com/antonbabenko/terraform-cost-estimation/master/terraform.jq
+        echo "PRICE_JSON=$(terraform state pull | jq -cf terraform.jq | curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/)" >> $GITHUB_ENV
+        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
+
+    - name: Set some summary outputs
       working-directory: Infra
       run: |
-        terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ >> $GITHUB_STEP_SUMMARY
-        echo "PRICE=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ | cut -d' ' -f2 | cut -d',' -f1 )" >> $GITHUB_ENV        
+        echo ${{env.PRICE_JSON}} >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         terraform output instance_ip >> $GITHUB_STEP_SUMMARY
-        echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV        
+     
       
     - name: Discord Webhook Action
+      if: github.ref == 'refs/heads/main'
       uses: tsickert/discord-webhook@v5.3.0
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
@@ -85,18 +92,21 @@ jobs:
           Server IP: ${{ env.TF_VAR_instance_ip }}
           Server Name: ${{ env.TF_VAR_server_name }}
           Server Password: ${{ env.TF_VAR_server_password }}
-          Running Cost: $${{ env.PRICE }} USD p/hour
+          Running Cost: $( echo "$PRICE_JSON" | cut -d' ' -f2 | cut -d',' -f1 ) USD p/hour
           
     - name: Prepare key file
       working-directory: Infra
       run: |
         echo "$(terraform output secret_key)" >> ../Docker/id_rsa
         chmod 0400 ../Docker/id_rsa
+
+    - name: Sleep - wait for cloudinit
+      run: |
         sleep 60s
 
     - name: Copy game files from S3
       run: |
-        aws s3 cp s3://game-files-maximumpigs/${{ env.TF_VAR_game }}/ ./${{ env.TF_VAR_game }} --recursive
+        aws s3 cp s3://game-files-maximumpigs/${{ github.ref == 'refs/heads/main' && '' || 'dev/' }}${{ env.TF_VAR_game }}/ ./${{ env.TF_VAR_game }} --recursive
 
     - name: Place game files
       run: |
@@ -110,7 +120,7 @@ jobs:
       run: |
         terraform init \
         -backend-config="backend.hcl" \
-        -backend-config="key=state/game_servers/${{ env.TF_VAR_game }}/docker.tfstate"
+        -backend-config="key=state/game_servers/${{ github.ref == 'refs/heads/main' && '' || 'dev/' }}${{ env.TF_VAR_game }}/docker.tfstate"
 
     # Generates an execution plan for Terraform
     - name: Terraform Apply Docker
