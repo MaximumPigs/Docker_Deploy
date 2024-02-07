@@ -13,7 +13,7 @@ variable "my_ip" {
 }
 
 variable "game" {
-  type    = string
+  type = string
 }
 
 variable "runner_access_enabled" {
