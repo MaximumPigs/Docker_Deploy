@@ -28,7 +28,7 @@ jobs:
       TF_VAR_game: ${{ github.event.client_payload.game || github.event.inputs.game}}
       TF_VAR_server_name: "[AU]Bro-${{ github.event.client_payload.game || github.event.inputs.game }}"
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
-      TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+      TF_VAR_discord_webhook: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || '' }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
