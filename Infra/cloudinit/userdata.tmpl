@@ -38,3 +38,7 @@ system_info:
 runcmd:
   - mkdir /data
   - chmod -R 777 /data
+  - dd if=/dev/zero of=/swapfile0 bs=1024 count=2097152
+  - chmod 600 /swapfile0
+  - mkswap /swapfile0
+  - swapon /swapfile0
