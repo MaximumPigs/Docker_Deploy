@@ -17,7 +17,7 @@ variable "game" {
 }
 
 variable "environment" {
-  type    = string
+  type = string
 }
 
 variable "runner_access_enabled" {
