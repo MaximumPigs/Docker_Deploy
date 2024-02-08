@@ -44,17 +44,17 @@ write_files:
 
   - path: /opt/backup.sh
     content: |
-    #! /bin/bash
+      #! /bin/bash
 
-    for dir in ${save_dirs};
-    do
-      /usr/bin/aws s3 cp /data/$dir s3://game-files-maximumpigs/${environment}${game}/$dir --recursive;
-    done
+      for dir in ${save_dirs};
+      do
+        /usr/bin/aws s3 cp /data/$dir s3://game-files-maximumpigs/${environment}${game}/$dir --recursive;
+      done
 
-    for file in ${save_files};
-    do
-      /usr/bin/aws s3 cp /data/$file s3://game-files-maximumpigs/${environment}${game}/$file;
-    done
+      for file in ${save_files};
+      do
+        /usr/bin/aws s3 cp /data/$file s3://game-files-maximumpigs/${environment}${game}/$file;
+      done
 
   - path: /etc/crontab
     content: |

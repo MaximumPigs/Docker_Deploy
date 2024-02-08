@@ -60,7 +60,7 @@ jobs:
       run: |
         terraform init \
         -backend-config="backend.hcl" \
-        -backend-config="key=state/game_servers/${{ env.TF_VAR_environment}} ${{ env.TF_VAR_game }}/infra.tfstate"
+        -backend-config="key=state/game_servers/${{ env.TF_VAR_environment}}${{ env.TF_VAR_game }}/infra.tfstate"
 
     # Applies Terraform config
     - name: Terraform Apply AWS
@@ -110,7 +110,7 @@ jobs:
 
     - name: Copy game files from S3
       run: |
-        aws s3 cp s3://game-files-maximumpigs/${{ github.ref == 'refs/heads/main' && '' || 'dev/' }}${{ env.TF_VAR_game }}/ ./${{ env.TF_VAR_game }} --recursive
+        aws s3 cp s3://game-files-maximumpigs/${{ env.TF_VAR_environment }}${{ env.TF_VAR_game }}/ ./${{ env.TF_VAR_game }} --recursive
 
     - name: Place game files
       run: |
@@ -124,7 +124,7 @@ jobs:
       run: |
         terraform init \
         -backend-config="backend.hcl" \
-        -backend-config="key=state/game_servers/${{ github.ref == 'refs/heads/main' && '' || 'dev/' }}${{ env.TF_VAR_game }}/docker.tfstate"
+        -backend-config="key=state/game_servers/${{ env.TF_VAR_environment }}${{ env.TF_VAR_game }}/docker.tfstate"
 
     # Generates an execution plan for Terraform
     - name: Terraform Apply Docker
