@@ -8,7 +8,7 @@ resource "aws_key_pair" "generated_key" {
 }
 
 resource "aws_iam_policy" "game_s3_access" {
-  name = "s3_access_${var.environment}${var.game}"
+  name = "s3_access_${var.environment}_${var.game}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -23,7 +23,7 @@ resource "aws_iam_policy" "game_s3_access" {
           "s3:GetBucketLocation"
         ],
         "Resource" : [
-          "arn:aws:s3:::game-files-maximumpigs/${var.environment}${var.game}/*",
+          "arn:aws:s3:::game-files-maximumpigs/${var.environment}/${var.game}/*",
           "arn:aws:s3:::game-files-maximumpigs"
         ]
       },
@@ -57,6 +57,6 @@ resource "aws_iam_role" "ec2_s3_access" {
 }
 
 resource "aws_iam_instance_profile" "s3_access" {
-  name = "s3_access_${var.environment}${var.game}"
+  name = "s3_access_${var.environment}_${var.game}"
   role = aws_iam_role.ec2_s3_access.name
 }

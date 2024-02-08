@@ -18,7 +18,6 @@ variable "game" {
 
 variable "environment" {
   type    = string
-  default = ""
 }
 
 variable "runner_access_enabled" {
@@ -28,14 +27,14 @@ variable "runner_access_enabled" {
 
 # AWS information
 
-variable "AWS_BUCKET_ACCESS_KEY" {
-  type      = string
-  sensitive = true
-  default   = ""
-}
+# variable "AWS_BUCKET_ACCESS_KEY" {
+#   type      = string
+#   sensitive = true
+#   default   = ""
+# }
 
-variable "AWS_BUCKET_SECRET_ACCESS_KEY" {
-  type      = string
-  sensitive = true
-  default   = ""
-}
+# variable "AWS_BUCKET_SECRET_ACCESS_KEY" {
+#   type      = string
+#   sensitive = true
+#   default   = ""
+# }

@@ -49,12 +49,12 @@ write_files:
 
       for dir in ${save_dirs};
       do
-        /usr/bin/aws s3 cp /data/$dir s3://game-files-maximumpigs/${environment}${game}/$dir --recursive;
+        /usr/bin/aws s3 cp /data/$dir s3://game-files-maximumpigs/${environment}/${game}/$dir --recursive;
       done
 
       for file in ${save_files};
       do
-        /usr/bin/aws s3 cp /data/$file s3://game-files-maximumpigs/${environment}${game}/$file;
+        /usr/bin/aws s3 cp /data/$file s3://game-files-maximumpigs/${environment}/${game}/$file;
       done
 
   - path: /etc/crontab
@@ -67,7 +67,7 @@ runcmd:
   - mkdir /data
   - chmod -R 777 /data
   - chown root:ubuntu /opt/backup.sh
-  - /usr/bin/aws s3 sync s3://game-files-maximumpigs/${environment}${game}/ /data/
+  - /usr/bin/aws s3 sync s3://game-files-maximumpigs/${environment}/${game}/ /data/
   - dd if=/dev/zero of=/swapfile0 bs=1024 count=2097152
   - chmod 600 /swapfile0
   - mkswap /swapfile0
