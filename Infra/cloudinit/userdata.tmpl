@@ -43,6 +43,8 @@ write_files:
     append: true
 
   - path: /opt/backup.sh
+    owner: root:ubuntu
+    permissions: '0770'
     content: |
       #! /bin/bash
 
