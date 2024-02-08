@@ -30,8 +30,6 @@ jobs:
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || '' }}
       TF_VAR_environment: ${{ github.ref == 'refs/heads/main' && 'main' || 'dev' }}
-      TF_VAR_AWS_BUCKET_ACCESS_KEY: ${{ secrets.AWS_BUCKET_ACCESS_KEY }}
-      TF_VAR_AWS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.AWS_BUCKET_SECRET_ACCESS_KEY }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -83,7 +81,6 @@ jobs:
         echo ${{env.PRICE_JSON}} >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         terraform output instance_ip >> $GITHUB_STEP_SUMMARY
-     
       
     - name: Discord Webhook Action
       if: github.ref == 'refs/heads/main'
@@ -107,16 +104,6 @@ jobs:
     - name: Sleep - wait for cloudinit
       run: |
         sleep 60s
-
-    # - name: Copy game files from S3
-    #   run: |
-    #     aws s3 cp s3://game-files-maximumpigs/${{ env.TF_VAR_environment }}/${{ env.TF_VAR_game }}/ ./${{ env.TF_VAR_game }} --recursive
-
-    # - name: Place game files
-    #   run: |
-    #     rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ./${{ env.TF_VAR_game }}/ ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
-    #     ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data'
-    #     rm -r ${{ env.TF_VAR_game }}
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
