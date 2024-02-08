@@ -35,12 +35,12 @@ system_info:
      - "${gen_key}"
 
 write_files:
-  - path: /etc/environment
-    content: |
-      AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY}"
-      AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
-      AWS_DEFAULT_REGION="ap-southeast-2"
-    append: true
+  # - path: /etc/environment
+  #   content: |
+  #     AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY}"
+  #     AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
+  #     AWS_DEFAULT_REGION="ap-southeast-2"
+  #   append: true
 
   - path: /opt/backup.sh
     permissions: '0770'
@@ -67,7 +67,7 @@ runcmd:
   - mkdir /data
   - chmod -R 777 /data
   - chown root:ubuntu /opt/backup.sh
-  - /usr/bin/aws s3 cp s3://game-files-maximumpigs/${environment}${game}/ /data/ --recursive
+  - /usr/bin/aws s3 sync s3://game-files-maximumpigs/${environment}${game}/ /data/
   - dd if=/dev/zero of=/swapfile0 bs=1024 count=2097152
   - chmod 600 /swapfile0
   - mkswap /swapfile0
