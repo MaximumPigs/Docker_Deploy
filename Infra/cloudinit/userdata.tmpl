@@ -45,7 +45,7 @@ write_files:
   - path: /etc/crontab
     content: |
       * */3 * * * ubuntu /usr/bin/docker restart palworld 2>/dev/null
-    append: true      
+    append: true
 
 runcmd:
   - mkdir /data
