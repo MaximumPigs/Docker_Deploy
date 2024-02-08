@@ -29,6 +29,7 @@ jobs:
       TF_VAR_server_name: "[AU]Bro-${{ github.event.client_payload.game || github.event.inputs.game }}"
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || '' }}
+      TF_VAR_environment: ${{ github.ref == 'refs/heads/main' && '' || 'dev/' }}
       TF_VAR_AWS_BUCKET_ACCESS_KEY: ${{ secrets.AWS_BUCKET_ACCESS_KEY }}
       TF_VAR_AWS_BUCKET_SECRET_ACCESS_KEY: ${{ secrets.AWS_BUCKET_SECRET_ACCESS_KEY }}
 
@@ -59,7 +60,7 @@ jobs:
       run: |
         terraform init \
         -backend-config="backend.hcl" \
-        -backend-config="key=state/game_servers/${{ github.ref == 'refs/heads/main' && '' || 'dev/' }}${{ env.TF_VAR_game }}/infra.tfstate"
+        -backend-config="key=state/game_servers/${{ env.TF_VAR_environment}} ${{ env.TF_VAR_game }}/infra.tfstate"
 
     # Applies Terraform config
     - name: Terraform Apply AWS

@@ -16,6 +16,11 @@ variable "game" {
   type = string
 }
 
+variable "environment" {
+  type    = string
+  default = ""
+}
+
 variable "runner_access_enabled" {
   type    = bool
   default = true

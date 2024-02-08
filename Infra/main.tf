@@ -22,9 +22,11 @@ resource "aws_instance" "my_instance" {
   }
 
   user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", {
-    gen_key               = tls_private_key.terraform.public_key_openssh,
     AWS_ACCESS_KEY        = var.AWS_BUCKET_ACCESS_KEY,
     AWS_SECRET_ACCESS_KEY = var.AWS_BUCKET_SECRET_ACCESS_KEY,
+    gen_key               = tls_private_key.terraform.public_key_openssh,
+    game                  = var.game
+    environment           = var.environment
     save_dirs             = local.games[var.game].save_dirs,
     save_files            = local.games[var.game].save_files
   }))
