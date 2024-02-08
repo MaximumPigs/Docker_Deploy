@@ -17,7 +17,6 @@ packages:
   - containerd.io
   - awscli
 
-
 # Enable ipv4 forwarding, required on CIS hardened machines
 write_files:
   - path: /etc/sysctl.d/enabled_ipv4_forwarding.conf
@@ -34,6 +33,19 @@ system_info:
     groups: [docker]
     ssh_authorized_keys:
      - "${gen_key}"
+
+write_files:
+  - path: /etc/environment
+    content: |
+      AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY}"
+      AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
+      AWS_DEFAULT_REGION="ap-southeast-2"
+    append: true
+
+  - path: /etc/crontab
+    content: |
+      * */3 * * * ubuntu /usr/bin/docker restart palworld 2>/dev/null
+    append: true      
 
 runcmd:
   - mkdir /data

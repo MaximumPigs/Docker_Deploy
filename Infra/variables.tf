@@ -12,17 +12,25 @@ variable "my_ip" {
   default = ""
 }
 
-variable "instance_state" {
-  type    = string
-  default = "running"
-}
-
 variable "game" {
-  type    = string
-  default = "enshrouded"
+  type = string
 }
 
 variable "runner_access_enabled" {
   type    = bool
   default = true
+}
+
+# AWS information
+
+variable "AWS_BUCKET_ACCESS_KEY" {
+  type      = string
+  sensitive = true
+  default   = ""
+}
+
+variable "AWS_BUCKET_SECRET_ACCESS_KEY" {
+  type      = string
+  sensitive = true
+  default   = ""
 }
