@@ -4,6 +4,10 @@ locals {
       name      = "palworld"
       vm_size   = "m6a.large"
       disk_size = "18"
+      # Directory path containing save files relative to container mount root. Will backup and restore all contents recursively. Separate multiple values by space. If left blank whole /data folder will be backed up.
+      save_dirs = "Pal/Saved/SaveGames/"
+      # Single save file path relative to container mount root. Will backup and restore these single files. Separate multiple values by space.
+      save_files = "Pal/Saved/Config/LinuxServer/GameUserSettings.ini"
       ports = [
         {
           index      = "1" # This is required as a unique key to use in the for_each loop
@@ -17,6 +21,10 @@ locals {
       name      = "enshrouded"
       vm_size   = "m6a.large"
       disk_size = "44"
+      # Directory path containing save files relative to container mount root. Will backup and restore all contents recursively. Separate multiple values by space. If left blank whole /data folder will be backed up.
+      save_dirs = ""
+      # Single save file path relative to container mount root. Will backup and restore these single files. Separate multiple values by space.
+      save_files = ""
       ports = [
         {
           index      = "1" # This is required as a unique key to use in the for_each loop
