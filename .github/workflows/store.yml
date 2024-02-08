@@ -26,7 +26,7 @@ jobs:
       AWS_DEFAULT_REGION: "ap-southeast-2"
       TF_VAR_my_ip: ${{ secrets.MY_IP }}
       TF_VAR_game: ${{ github.event.client_payload.game || github.event.inputs.game}}
-      TF_VAR_environment: ${{ github.ref == 'refs/heads/main' && '' || 'dev/' }}
+      TF_VAR_environment: ${{ github.ref == 'refs/heads/main' && 'main' || 'dev' }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -54,7 +54,7 @@ jobs:
       run: |
         terraform init \
         -backend-config="backend.hcl" \
-        -backend-config="key=state/game_servers/${{ env.TF_VAR_environment }}${{ env.TF_VAR_game }}/infra.tfstate"
+        -backend-config="key=state/game_servers/${{ env.TF_VAR_environment }}/${{ env.TF_VAR_game }}/infra.tfstate"
 
     # Applies Terraform config - Required here to update runner_ip firewall rule
     - name: Terraform Apply
@@ -91,7 +91,7 @@ jobs:
 
     - name: Copy game files to S3
       run: |
-        aws s3 sync ./${{ env.TF_VAR_game }} s3://game-files-maximumpigs/${{ env.TF_VAR_environment }}${{ env.TF_VAR_game }}/
+        aws s3 sync ./${{ env.TF_VAR_game }} s3://game-files-maximumpigs/${{ env.TF_VAR_environment }}/${{ env.TF_VAR_game }}/
         rm -r ${{ env.TF_VAR_game }}
 
 
