@@ -43,8 +43,7 @@ write_files:
     append: true
 
   - path: /opt/backup.sh
-    owner: ubuntu:ubuntu
-    permissions: '0700'
+    permissions: '0770'
     content: |
       #! /bin/bash
 
@@ -67,6 +66,7 @@ write_files:
 runcmd:
   - mkdir /data
   - chmod -R 777 /data
+  - chown root:ubuntu /opt/backup.sh
   - /usr/bin/aws s3 cp s3://game-files-maximumpigs/${environment}${game}/ /data/ --recursive
   - dd if=/dev/zero of=/swapfile0 bs=1024 count=2097152
   - chmod 600 /swapfile0
