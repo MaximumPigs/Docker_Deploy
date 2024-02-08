@@ -108,15 +108,15 @@ jobs:
       run: |
         sleep 60s
 
-    - name: Copy game files from S3
-      run: |
-        aws s3 cp s3://game-files-maximumpigs/${{ env.TF_VAR_environment }}${{ env.TF_VAR_game }}/ ./${{ env.TF_VAR_game }} --recursive
+    # - name: Copy game files from S3
+    #   run: |
+    #     aws s3 cp s3://game-files-maximumpigs/${{ env.TF_VAR_environment }}${{ env.TF_VAR_game }}/ ./${{ env.TF_VAR_game }} --recursive
 
-    - name: Place game files
-      run: |
-        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ./${{ env.TF_VAR_game }}/ ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
-        ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data'
-        rm -r ${{ env.TF_VAR_game }}
+    # - name: Place game files
+    #   run: |
+    #     rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ./${{ env.TF_VAR_game }}/ ubuntu@${{ env.TF_VAR_instance_ip }}:/data/
+    #     ssh ubuntu@${{ env.TF_VAR_instance_ip }} -i Docker/id_rsa -o StrictHostKeyChecking=no 'sudo chmod -R 777 /data'
+    #     rm -r ${{ env.TF_VAR_game }}
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
