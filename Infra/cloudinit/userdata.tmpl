@@ -59,9 +59,9 @@ write_files:
 
 runcmd:
   - mkdir /data
-  - chmod -R 777 /data
-  - chown root:ubuntu /opt/backup.sh
   - /usr/bin/aws s3 sync s3://game-files-maximumpigs/${environment}/${game}/ /data/
+  - chmod -R 777 /data --recursive
+  - chown root:ubuntu /opt/backup.sh
   - dd if=/dev/zero of=/swapfile0 bs=1024 count=2097152
   - chmod 600 /swapfile0
   - mkswap /swapfile0

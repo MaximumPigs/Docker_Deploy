@@ -72,7 +72,6 @@ jobs:
       run: |
         curl -sLO https://raw.githubusercontent.com/antonbabenko/terraform-cost-estimation/master/terraform.jq
         echo "PRICE_JSON=$(terraform state pull | jq -cf terraform.jq | curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/)" >> $GITHUB_ENV
-        echo "PRICE=$(echo $PRICE_JSON | cut -d' ' -f2 | cut -d',' -f1)" >> $GITHUB_ENV
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
 
     - name: Set some summary outputs
@@ -81,6 +80,7 @@ jobs:
         echo ${{env.PRICE_JSON}} >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         terraform output instance_ip >> $GITHUB_STEP_SUMMARY
+        echo "PRICE=$(echo $PRICE_JSON | cut -d' ' -f2 | cut -d',' -f1)" >> $GITHUB_ENV
       
     - name: Discord Webhook Action
       if: github.ref == 'refs/heads/main'
