@@ -65,7 +65,6 @@ jobs:
       working-directory: Infra
       run: |
         terraform apply -auto-approve
-        terraform refresh
 
     # Gets Terraform state and generates cost using cost.modules.tf
     - name: Set some environment vars
@@ -81,6 +80,7 @@ jobs:
         echo ${{env.PRICE_JSON}} >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         terraform output instance_ip >> $GITHUB_STEP_SUMMARY
+        echo "PRICE=$(echo $PRICE_JSON | cut -d' ' -f2 | cut -d',' -f1)" >> $GITHUB_ENV
       
     - name: Discord Webhook Action
       if: github.ref == 'refs/heads/main'
@@ -93,7 +93,7 @@ jobs:
           Server IP: ${{ env.TF_VAR_instance_ip }}
           Server Name: ${{ env.TF_VAR_server_name }}
           Server Password: ${{ env.TF_VAR_server_password }}
-          Running Cost: $( echo "$PRICE_JSON" | cut -d' ' -f2 | cut -d',' -f1 ) USD p/hour
+          Running Cost: ${{ env.PRICE }} USD p/hour
           
     - name: Prepare key file
       working-directory: Infra
