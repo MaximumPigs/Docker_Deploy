@@ -37,7 +37,7 @@ system_info:
 write_files:
 
   - path: /opt/backup.sh
-    permissions: '0770'
+    permissions: '0755'
     content: |
       #! /bin/bash
 
@@ -57,6 +57,21 @@ write_files:
       */10 * * * * ubuntu /opt/backup.sh
     append: true
 
+  - path: /etc/init.d/s3_backup
+    permissions: '0755'
+    content: |
+      #! /bin/bash
+
+      for dir in ${save_dirs};
+      do
+        /usr/bin/aws s3 cp /data/$dir s3://game-files-maximumpigs/${environment}/${game}/$dir --recursive;
+      done
+
+      for file in ${save_files};
+      do
+        /usr/bin/aws s3 cp /data/$file s3://game-files-maximumpigs/${environment}/${game}/$file;
+      done
+
 runcmd:
   - mkdir /data
   - chmod -R 777 /data
@@ -66,3 +81,4 @@ runcmd:
   - chmod 600 /swapfile0
   - mkswap /swapfile0
   - swapon /swapfile0
+  - ln /etc/init.d/s3_backup /etc/rc0.d/K02s3bak
