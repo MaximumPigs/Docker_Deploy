@@ -6,6 +6,7 @@ resource "aws_instance" "my_instance" {
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.subnet.id
   vpc_security_group_ids      = ["${aws_security_group.security_group.id}"]
+  iam_instance_profile        = aws_iam_instance_profile.s3_access.name
 
   root_block_device {
     delete_on_termination = true
@@ -21,5 +22,11 @@ resource "aws_instance" "my_instance" {
     cpu_credits = "standard"
   }
 
-  user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", { gen_key = tls_private_key.terraform.public_key_openssh, AWS_ACCESS_KEY = var.AWS_BUCKET_ACCESS_KEY, AWS_SECRET_ACCESS_KEY = var.AWS_BUCKET_SECRET_ACCESS_KEY }))
+  user_data_base64 = base64encode(templatefile("cloudinit/userdata.tmpl", {
+    gen_key     = tls_private_key.terraform.public_key_openssh,
+    game        = var.game
+    environment = var.environment
+    save_dirs   = local.games[var.game].save_dirs,
+    save_files  = local.games[var.game].save_files
+  }))
 }
