@@ -71,7 +71,7 @@ jobs:
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV     
         echo "PRICE=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ | cut -d' ' -f2 | cut -d',' -f1 )" >> $GITHUB_ENV
 
-    - name: Run backup command on instance
+    - name: Run backup script on instance
       run: |
         ssh -o "StrictHostKeyChecking=no" -i ./Docker/id_rsa ubuntu@${{ env.TF_VAR_instance_ip }} '/opt/backup.sh'
 

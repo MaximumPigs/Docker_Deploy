@@ -70,7 +70,7 @@ jobs:
         chmod 0400 ../Docker/id_rsa
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV
 
-    - name: Run backup command on instance
+    - name: Run backup script on instance
       run: |
         ssh -o "StrictHostKeyChecking=no" -i ./Docker/id_rsa ubuntu@${{ env.TF_VAR_instance_ip }} '/opt/backup.sh'
     
@@ -99,13 +99,14 @@ jobs:
 
     # Destroys AWS infra
     - name: Terraform Destroy AWS
+      if: always()
       id: AWS_Destroy
       working-directory: ./Infra
       run: terraform destroy -auto-approve
 
     - name: Discord Webhook Action
-      if: github.ref == 'refs/heads/main'
+      if: always()
       uses: tsickert/discord-webhook@v5.3.0
       with:
-        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+        webhook-url: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || ' '}}
         content: "${{ env.TF_VAR_game }} server is offline now. Bye"      
