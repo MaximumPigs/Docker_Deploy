@@ -70,28 +70,9 @@ jobs:
         echo "TF_VAR_instance_ip=$(terraform output instance_ip | sed 's/"//g')" >> $GITHUB_ENV     
         echo "PRICE=$(terraform state pull |  curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf/ | cut -d' ' -f2 | cut -d',' -f1 )" >> $GITHUB_ENV
 
-#PALWORLD
-
-    - name: Place game files
-      if: env.TF_VAR_game == 'palworld'
+    - name: Run backup script on instance
       run: |
-        mkdir -p palworld/Pal/Saved/SaveGames
-        mkdir -p palworld/Pal/Saved/Config/LinuxServer
-        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/SaveGames/ palworld/Pal/Saved/SaveGames/
-        rsync -u -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ubuntu@${{ env.TF_VAR_instance_ip }}:/data/Pal/Saved/Config/LinuxServer/GameUserSettings.ini palworld/Pal/Saved/Config/LinuxServer/
-
-#ENSHROUDED
-
-    - name: Place game files
-      if: env.TF_VAR_game == 'enshrouded'
-      run: |
-        mkdir -p enshrouded
-        rsync -ur -e "ssh -o StrictHostKeyChecking=no -i ./Docker/id_rsa" ubuntu@${{ env.TF_VAR_instance_ip }}:/data/ enshrouded/
-
-    - name: Copy game files to S3
-      run: |
-        aws s3 sync ./${{ env.TF_VAR_game }} s3://game-files-maximumpigs/${{ env.TF_VAR_environment }}/${{ env.TF_VAR_game }}/
-        rm -r ${{ env.TF_VAR_game }}
+        ssh -o "StrictHostKeyChecking=no" -i ./Docker/id_rsa ubuntu@${{ env.TF_VAR_instance_ip }} '/opt/backup.sh'
 
     - name: Discord Webhook Action
       if: github.ref == 'refs/heads/main'

@@ -27,6 +27,7 @@ resource "aws_instance" "my_instance" {
     game        = var.game
     environment = var.environment
     save_dirs   = local.games[var.game].save_dirs,
-    save_files  = local.games[var.game].save_files
+    save_files  = local.games[var.game].save_files,
+    swap_size   = local.games[var.game].swap_size
   }))
 }

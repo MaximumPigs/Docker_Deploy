@@ -37,7 +37,7 @@ system_info:
 write_files:
 
   - path: /opt/backup.sh
-    permissions: '0770'
+    permissions: '0755'
     content: |
       #! /bin/bash
 
@@ -60,9 +60,10 @@ write_files:
 runcmd:
   - mkdir /data
   - /usr/bin/aws s3 sync s3://game-files-maximumpigs/${environment}/${game}/ /data/
-  - chmod -R 777 /data --recursive
+  - chown root:docker /data --recursive
+  - chmod 775 /data --recursive
   - chown root:ubuntu /opt/backup.sh
-  - dd if=/dev/zero of=/swapfile0 bs=1024 count=2097152
+  - dd if=/dev/zero of=/swapfile0 bs=1024 count=$( expr ${swap_size} \* 1024 \* 1024 )
   - chmod 600 /swapfile0
   - mkswap /swapfile0
   - swapon /swapfile0
