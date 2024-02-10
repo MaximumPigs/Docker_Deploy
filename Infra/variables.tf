@@ -24,3 +24,8 @@ variable "runner_access_enabled" {
   type    = bool
   default = true
 }
+
+variable "vm_size" {
+  type    = string
+  default = "default"
+}

@@ -1,13 +1,12 @@
 # instance information
 
 variable "instance_ip" {
-  type    = string
-  default = ""
+  type = string
 }
 
 variable "server_name" {
   type    = string
-  default = ""
+  default = "blank"
 }
 
 variable "server_password" {
@@ -23,6 +22,9 @@ variable "discord_webhook" {
 }
 
 variable "game" {
-  type    = string
-  default = ""
+  type = string
+}
+
+variable "memory" {
+  type = number
 }
