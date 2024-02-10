@@ -21,3 +21,8 @@ variable "discord_webhook" {
   default   = null
   sensitive = true
 }
+
+variable "memory_limit" {
+  type    = string
+  default = "0"
+}

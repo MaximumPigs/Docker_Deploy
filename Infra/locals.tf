@@ -1,9 +1,18 @@
 locals {
   games = {
     palworld = {
-      name      = "palworld"
-      vm_size   = "m6a.large"
-      disk_size = "20"
+      name = "palworld"
+      vm_size = {
+        default = {
+          type   = "m6a.large"
+          memory = 8
+        },
+        large = {
+          type   = "r6a.large"
+          memory = 16
+        }
+      }
+      disk_size = "18"
       swap_size = "8"
       # Directory path containing save files relative to container mount root. Will backup and restore all contents recursively. Separate multiple values by space. If left blank whole /data folder will be backed up.
       save_dirs = "Pal/Saved/SaveGames/"
@@ -19,8 +28,17 @@ locals {
       ]
     },
     enshrouded = {
-      name      = "enshrouded"
-      vm_size   = "m6a.large"
+      name = "enshrouded"
+      vm_size = {
+        default = {
+          type   = "m6a.large"
+          memory = 8
+        },
+        large = {
+          type   = "r6a.large"
+          memory = 16
+        }
+      }
       disk_size = "45"
       swap_size = "8"
       # Directory path containing save files relative to container mount root. Will backup and restore all contents recursively. Separate multiple values by space. If left blank whole /data folder will be backed up.

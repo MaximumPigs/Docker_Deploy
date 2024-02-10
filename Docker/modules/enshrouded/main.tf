@@ -3,8 +3,10 @@ resource "docker_image" "image" {
 }
 
 resource "docker_container" "container" {
-  name  = "enshrouded"
-  image = docker_image.image.image_id
+  name        = "enshrouded"
+  image       = docker_image.image.image_id
+  memory      = var.memory_limit
+  memory_swap = -1
 
   ports {
     internal = 15636

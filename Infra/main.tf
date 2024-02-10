@@ -1,7 +1,7 @@
 resource "aws_instance" "my_instance" {
 
   ami                         = "ami-08f0bc76ca5236b20"
-  instance_type               = local.games[var.game].vm_size
+  instance_type               = local.games[var.game].vm_size[var.vm_size].type
   key_name                    = var.key_pair
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.subnet.id

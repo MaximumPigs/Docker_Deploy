@@ -5,6 +5,7 @@ module "palworld" {
   instance_ip     = var.instance_ip
   server_password = var.server_password
   discord_webhook = var.discord_webhook
+  memory_limit    = local.memory_limit
 }
 
 module "enshrouded" {
@@ -14,8 +15,5 @@ module "enshrouded" {
   instance_ip     = var.instance_ip
   server_password = var.server_password
   discord_webhook = var.discord_webhook
-}
-
-output "game" {
-  value = var.game
+  memory_limit    = local.memory_limit
 }

@@ -53,7 +53,7 @@ write_files:
 
   - path: /etc/crontab
     content: |
-      0 */3 * * * ubuntu /usr/bin/docker restart palworld 2>/dev/null
+      0 */4 * * * ubuntu /usr/bin/docker restart palworld 2>/dev/null
       */10 * * * * ubuntu /opt/backup.sh
     append: true
 
