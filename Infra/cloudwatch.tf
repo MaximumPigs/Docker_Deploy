@@ -26,7 +26,7 @@ resource "aws_cloudwatch_metric_alarm" "unreachable" {
   threshold = "2"
 
   alarm_actions = [
-    "arn:aws:automate:${data.ws_region.current}:ec2:recover"
+    "arn:aws:automate:${data.aws_region.current}:ec2:recover"
   ]
 
   dimensions = {
