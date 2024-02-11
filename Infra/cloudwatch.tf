@@ -18,7 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "no_players" {
 resource "aws_cloudwatch_metric_alarm" "unreachable" {
   alarm_name          = "Unreachable ${var.environment} ${var.game}"
   namespace           = "AWS/EC2"
-  metric_name         = "StatusCheckFailed"
+  metric_name         = "StatusCheckFailed_System"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   period              = "10"
