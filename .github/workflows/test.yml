@@ -16,7 +16,7 @@ on:
           type: choice
           options:
             - default
-            - large         
+            - large
 
   repository_dispatch:
     types: [test]
