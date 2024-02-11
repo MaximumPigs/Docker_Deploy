@@ -20,8 +20,8 @@ resource "aws_cloudwatch_metric_alarm" "unreachable" {
   namespace           = "AWS/EC2"
   metric_name         = "StatusCheckFailed_System"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  period              = "600"
+  evaluation_periods  = "2"
+  period              = "60"
   statistic           = "Average"
   threshold           = "1"
 
