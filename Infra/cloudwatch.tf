@@ -4,7 +4,7 @@ resource "aws_cloudwatch_metric_alarm" "no_players" {
   metric_name         = "NetworkPacketsOut"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "2"
-  period              = "10"
+  period              = "600"
   statistic           = "Average"
   threshold           = "5000"
 
@@ -21,9 +21,9 @@ resource "aws_cloudwatch_metric_alarm" "unreachable" {
   metric_name         = "StatusCheckFailed_System"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
-  period              = "10"
+  period              = "600"
   statistic           = "Average"
-  threshold           = "2"
+  threshold           = "1"
 
   alarm_actions = [
     "arn:aws:automate:${data.aws_region.current.name}:ec2:recover"
