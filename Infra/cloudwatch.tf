@@ -8,7 +8,7 @@ resource "aws_cloudwatch_metric_alarm" "no_players" {
   statistic = "Average"
   threshold = "5000"
 
-  alarm_actions = ["arn:aws:automate:${data.aws_region.current}:ec2:terminate"]
+  alarm_actions = ["arn:aws:automate:${data.aws_region.current.name}:ec2:terminate"]
 
   dimensions = {
     InstanceId = aws_instance.my_instance.id
@@ -26,7 +26,7 @@ resource "aws_cloudwatch_metric_alarm" "unreachable" {
   threshold = "2"
 
   alarm_actions = [
-    "arn:aws:automate:${data.aws_region.current}:ec2:recover"
+    "arn:aws:automate:${data.aws_region.current.name}:ec2:recover"
   ]
 
   dimensions = {
