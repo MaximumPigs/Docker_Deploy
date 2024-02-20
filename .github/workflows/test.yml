@@ -38,7 +38,7 @@ jobs:
       TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
       TF_VAR_instance_ip: "123.123.123.123"
       TF_VAR_vm_size: ${{ github.event.client_payload.vm_size || github.event.inputs.vm_size }}
-      PRICE: "0.05"      
+      PRICE: "0.05"
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
