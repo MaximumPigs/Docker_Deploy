@@ -55,7 +55,7 @@ write_files:
     append: true
     content: |
       */10 * * * * ubuntu /opt/backup.sh
-      0 */5 * * * ubuntu /usr/bin/docker restart palworld 2>/dev/null
+#      0 */5 * * * ubuntu /usr/bin/docker restart palworld 2>/dev/null
 
 runcmd:
   - mkdir /data
