@@ -52,16 +52,16 @@ write_files:
       done
 
   - path: /etc/crontab
-    content: |
-      0 */4 * * * ubuntu /usr/bin/docker restart palworld 2>/dev/null
-      */10 * * * * ubuntu /opt/backup.sh
     append: true
+    content: |
+      */10 * * * * ubuntu /opt/backup.sh
+#      0 */5 * * * ubuntu /usr/bin/docker restart palworld 2>/dev/null
 
 runcmd:
   - mkdir /data
   - /usr/bin/aws s3 sync s3://game-files-maximumpigs/${environment}/${game}/ /data/
   - chown root:docker /data --recursive
-  - chmod 775 /data --recursive
+  - chmod 777 /data --recursive
   - chown root:ubuntu /opt/backup.sh
   - dd if=/dev/zero of=/swapfile0 bs=1024 count=$( expr ${swap_size} \* 1024 \* 1024 )
   - chmod 600 /swapfile0

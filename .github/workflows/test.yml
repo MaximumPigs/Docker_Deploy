@@ -10,6 +10,13 @@ on:
         options:
           - palworld
           - enshrouded
+      vm_size:
+          description: 'Select Server Size'
+          required: true
+          type: choice
+          options:
+            - default
+            - large
 
   repository_dispatch:
     types: [test]
@@ -30,7 +37,8 @@ jobs:
       TF_VAR_server_password: ${{ secrets.SERVER_PASSWORD }}
       TF_VAR_discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
       TF_VAR_instance_ip: "123.123.123.123"
-      PRICE: "0.05"      
+      TF_VAR_vm_size: ${{ github.event.client_payload.vm_size || github.event.inputs.vm_size }}
+      PRICE: "0.05"
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
