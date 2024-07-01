@@ -1,3 +1,3 @@
 locals {
-  discord_webhook_enable = var.discord_webhook == "" ? false : true
+  discord_webhook_enable = length(var.discord_webhook) > 0 ? true : false
 }
