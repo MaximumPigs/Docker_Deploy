@@ -32,7 +32,7 @@ resource "aws_iam_policy" "game_s3_access" {
 }
 
 resource "aws_iam_role" "ec2_s3_access" {
-  name = "ec2_s3_access"
+  name = "ec2_s3_access_${var.environment}_${var.game}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
